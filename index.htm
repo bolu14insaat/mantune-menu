@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantune - Dijital Menü</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        :root { --gold: #c5a059; --bg: #0f0f0f; --card: #1a1a1a; --text: #e0e0e0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        header { text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 20px; margin-bottom: 30px; }
+        h1 { color: var(--gold); letter-spacing: 4px; text-transform: uppercase; margin: 0; font-size: 2.5rem; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .category-title { color: var(--gold); border-left: 4px solid var(--gold); padding-left: 15px; margin: 40px 0 20px 0; text-transform: uppercase; font-size: 1.4rem; }
+        .menu-item { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #222; }
+        .item-info { flex: 1; padding-right: 15px; }
+        .item-name { font-weight: bold; font-size: 1.1rem; display: block; }
+        .item-desc { font-size: 0.9rem; color: #888; margin-top: 4px; display: block; }
+        .item-price { color: var(--gold); font-weight: bold; font-size: 1.1rem; white-space: nowrap; }
+        #loading { text-align: center; margin-top: 50px; color: var(--gold); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MANTUNE</h1>
+            <p style="color: #666; font-style: italic;">Mantı • Gözleme • Ev Yemekleri</p>
+        </header>
+        
+        <div id="loading">Menü yükleniyor...</div>
+        <div id="menu-content"></div>
+    </div>
 
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1tGMLWyasdCc-FNUF2-iDNHfC0iMjn-ir3FhJizpT0BU/gviz/tq?tqx=out:csv';
+
+        async function loadMenu() {
+            try {
+                const response = await fetch(sheetUrl);
+                const csvData = await response.text();
+                
+                Papa.parse(csvData, {
+                    header: true,
+                    complete: (results) => {
+                        renderMenu(results.data);
+                    }
+                });
+            } catch (error) {
+                document.getElementById('loading').innerHTML = 'Menü yüklenirken bir hata oluştu.';
+            }
+        }
+
+        function renderMenu(data) {
+            const content = document.getElementById('menu-content');
+            document.getElementById('loading').style.display = 'none';
+            
+            // Verileri kategorilere grupla
+            const categories = {};
+            data.forEach(item => {
+                const cat = item['Menü Kategorisi'] || 'Diğer';
+                if (!categories[cat]) categories[cat] = [];
+                categories[cat].push(item);
+            });
+
+            // HTML oluştur
+            for (const [category, items] of Object.entries(categories)) {
+                if(category === 'Diğer' && items.length === 0) continue;
+                
+                let catHtml = `<div class="category-section"><h2 class="category-title">${category}</h2>`;
+                
+                items.forEach(item => {
+                    if(!item['Ürün Adı']) return; // Boş satırları atla
+                    catHtml += `
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <span class="item-name">${item['Ürün Adı']}</span>
+                                <span class="item-desc">${item['Açıklama'] || ''}</span>
+                            </div>
+                            <div class="item-price">₺${item['Fiyat (TL)']}</div>
+                        </div>`;
+                });
+                
+                catHtml += `</div>`;
+                content.innerHTML += catHtml;
+            }
+        }
+
+        loadMenu();
+    </script>
+</body>
+</html>
