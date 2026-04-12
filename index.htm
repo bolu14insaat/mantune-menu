@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantune - Dijital Menü</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Open+Sans:wght@400;600;700&family=Damion&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;700&family=Marck+Script&display=swap" rel="stylesheet">
 
     <style>
         :root { 
-            --red: #a33;        /* Kategori Başlıkları */
-            --black: #000000;    /* Metinler */
-            --off-white: #ffffff; /* Ana Başlık */
-            /* YENİ: Yazı kutuları için daha opak, sütlü bej tonu */
-            --box-bg: rgba(245, 240, 230, 0.85); 
+            --red: #a33;        
+            --black: #000000;    
+            --gold: #8c734b;
+            /* Renk tonu aynı, sadece daha şeffaf (0.85'ten 0.5'e çekildi) */
+            --box-bg: rgba(245, 240, 230, 0.5); 
         }
         
         body { 
-            font-family: 'Open Sans', sans-serif; 
+            font-family: 'Montserrat', sans-serif; 
             background-image: url('arkaplan.png'); 
             background-size: cover; 
             background-position: center; 
@@ -35,13 +36,13 @@
             z-index: 1; 
             opacity: 1; 
             pointer-events: none;
-            width: 480px; 
+            width: 450px; 
             height: auto;
-            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
         }
 
-        .img-left { bottom: -70px; left: -90px; transform: rotate(-8deg); }
-        .img-right { top: 6%; right: -110px; transform: rotate(8deg); }
+        .img-left { bottom: -50px; left: -80px; transform: rotate(-5deg); }
+        .img-right { top: 8%; right: -100px; transform: rotate(5deg); }
 
         .container { 
             max-width: 650px; 
@@ -51,94 +52,101 @@
             z-index: 10; 
         }
 
-        header { text-align: center; padding: 70px 0; }
+        header { text-align: center; padding: 60px 0; }
         
+        /* Yeni Modern & Zarif Başlık Tasarımı */
         h1 { 
-            font-family: 'Playfair Display', serif;
-            color: var(--off-white); 
-            letter-spacing: 12px; 
+            font-family: 'Cinzel', serif;
+            color: var(--black); 
+            letter-spacing: 15px; 
             text-transform: uppercase; 
             margin: 0; 
-            font-size: 5.5rem; 
+            font-size: 4rem; 
             font-weight: 900;
-            /* Başlığı daha gösterişli yapan derin gölge */
-            text-shadow: 2px 4px 15px rgba(0,0,0,0.4), 0 0 20px rgba(255,255,255,0.2); 
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: var(--red);
         }
 
         .tagline { 
-            color: var(--black); 
-            font-style: italic; 
+            color: var(--red); 
+            font-style: normal; 
             margin-top: 15px; 
-            font-size: 1.3rem; 
+            font-size: 1.1rem; 
             font-weight: 700; 
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
         
-        .category-section { margin-top: 60px; }
+        .category-section { margin-top: 50px; }
         
         .category-title { 
             color: var(--red); 
             text-align: center; 
             text-transform: uppercase; 
-            letter-spacing: 4px;
-            font-size: 2rem;
-            margin-bottom: 40px;
+            letter-spacing: 5px;
+            font-size: 1.8rem;
+            margin-bottom: 35px;
             font-weight: 800;
-            border-bottom: 3px solid var(--red);
             display: block;
-            padding-bottom: 15px;
         }
 
-        /* GÜNCELLEME: Blur kaldırıldı, opaklık artırıldı */
         .menu-item { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start;
-            margin-bottom: 20px; 
-            background: var(--box-bg); /* Daha opak bej arka plan */
-            padding: 22px;
-            border-radius: 12px;
-            backdrop-filter: none; /* Blur TAMAMEN KALDIRILDI */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 15px; 
+            background: var(--box-bg); 
+            padding: 20px;
+            border-radius: 8px;
+            backdrop-filter: none; 
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .item-info { flex: 1; padding-right: 25px; }
+        .item-info { flex: 1; padding-right: 20px; }
         
         .item-name { 
-            font-family: 'Playfair Display', serif;
             font-weight: 700; 
-            font-size: 1.45rem; 
+            font-size: 1.3rem; 
             display: block; 
             color: var(--black); 
-            margin-bottom: 6px; 
+            margin-bottom: 5px; 
+            text-transform: uppercase;
         }
         
+        /* Yeni Daha Okunaklı El Yazısı Fontu */
         .item-desc { 
-            font-family: 'Damion', cursive; 
-            font-size: 1.25rem; 
-            color: var(--black); 
+            font-family: 'Marck Script', cursive; 
+            font-size: 1.4rem; 
+            color: #333; 
             display: block; 
             font-weight: 400;
-            line-height: 1.4;
+            line-height: 1.2;
         }
         
         .item-price { 
             color: var(--black); 
             font-weight: 900; 
-            font-size: 1.6rem; 
+            font-size: 1.5rem; 
             white-space: nowrap; 
         }
 
-        #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.6rem; font-weight: bold; }
-        footer { text-align: center; padding: 70px; color: rgba(0,0,0,0.5); font-size: 1rem; font-weight: 700; }
+        #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.4rem; font-weight: bold; }
+        footer { text-align: center; padding: 60px; color: rgba(0,0,0,0.4); font-size: 0.9rem; font-weight: 700; }
 
         @media (max-width: 768px) {
-            .bg-image { width: 320px; }
-            .img-left { left: -80px; bottom: -10px; }
-            .img-right { right: -90px; top: 10%; }
-            h1 { font-size: 3.2rem; letter-spacing: 6px; }
-            .menu-item { flex-direction: column; padding: 18px; }
-            .item-price { margin-top: 12px; }
+            .bg-image { width: 300px; }
+            h1 { font-size: 2.2rem; letter-spacing: 8px; }
+            .menu-item { padding: 15px; }
             body { background-attachment: scroll; }
         }
     </style>
@@ -146,12 +154,12 @@
 <body>
 
     <img src="manti.png" class="bg-image img-left" alt="Mantı">
-    <img src="gozleme.png" class="bg-image img-right" alt="Gözleme">
+    <img src="manti.png" class="bg-image img-right" alt="Gözleme">
 
     <div class="container">
         <header>
             <h1>MANTUNE</h1>
-            <div class="tagline">Mantı • Gözleme • Ev Yemekleri</div>
+            <div class="tagline">Mutfak Sanatı • Bolu</div>
         </header>
         
         <div id="loading">Menü Hazırlanıyor...</div>
@@ -175,7 +183,7 @@
                     complete: (results) => { renderMenu(results.data); }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Bağlantı Hatası.';
+                document.getElementById('loading').innerHTML = 'Veri çekilemedi.';
             }
         }
 
