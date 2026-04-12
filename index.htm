@@ -6,7 +6,7 @@
     <title>Mantune - Dijital Menü</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Italiana&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -14,7 +14,7 @@
             --green-dark: #1f431b;
             --black: #111111;
             --box-bg: rgba(245, 240, 230, 0.52);
-            --white-soft: rgba(255,255,255,0.82);
+            --white-soft: rgba(255,255,255,0.84);
             --border-soft: rgba(45,90,39,0.16);
             --shadow: 0 10px 24px rgba(0,0,0,0.08);
             --shadow-strong: 0 16px 34px rgba(0,0,0,0.10);
@@ -130,9 +130,52 @@
             box-shadow: 0 6px 18px rgba(45,90,39,0.22);
         }
 
-        .flag {
-            font-size: 1rem;
-            line-height: 1;
+        .flag-box {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.10);
+        }
+
+        .flag-tr {
+            background: #e11d48;
+        }
+
+        .flag-tr::before {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #fff;
+            left: 4px;
+            top: 5px;
+        }
+
+        .flag-tr::after {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #e11d48;
+            left: 6px;
+            top: 5px;
+            box-shadow:
+                6px 0 0 -4px #fff,
+                6px 0 0 -3px #fff;
+        }
+
+        .flag-en {
+            background:
+                linear-gradient(to right, transparent 0 40%, #fff 40% 60%, transparent 60%),
+                linear-gradient(to bottom, transparent 0 40%, #fff 40% 60%, transparent 60%),
+                linear-gradient(to right, transparent 0 44%, #c62828 44% 56%, transparent 56%),
+                linear-gradient(to bottom, transparent 0 44%, #c62828 44% 56%, transparent 56%),
+                #1e3a8a;
         }
 
         header {
@@ -145,70 +188,83 @@
             display: inline-flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            padding: 18px 24px;
+            gap: 10px;
+            padding: 20px 26px 12px;
         }
 
-        .logo-icon {
-            width: 74px;
-            height: 74px;
-            border: 2px solid rgba(45,90,39,0.24);
-            border-radius: 22px;
-            transform: rotate(45deg);
+        .logo-emblem {
+            width: 96px;
+            height: 96px;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.72);
-            box-shadow: var(--shadow);
-            margin-bottom: 8px;
-            position: relative;
+            margin-bottom: 2px;
         }
 
-        .logo-icon::before {
+        .logo-emblem::before,
+        .logo-emblem::after {
             content: "";
-            width: 26px;
-            height: 26px;
-            border: 2px solid rgba(45,90,39,0.18);
-            border-radius: 8px;
             position: absolute;
+            inset: 0;
+            border: 1.6px solid rgba(45,90,39,0.22);
+            border-radius: 28px;
+            transform: rotate(45deg);
+            background: rgba(255,255,255,0.58);
+            box-shadow: var(--shadow);
         }
 
-        .logo-icon span {
-            transform: rotate(-45deg);
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
+        .logo-emblem::after {
+            inset: 16px;
+            border-radius: 16px;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .logo-center {
+            position: relative;
+            z-index: 2;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(45,90,39,0.24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.76);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--green);
             letter-spacing: 1px;
         }
 
         .brand-name {
-            font-family: 'Cinzel', serif;
+            font-family: 'Italiana', serif;
             color: var(--green);
-            letter-spacing: 0.42rem;
+            letter-spacing: 0.52rem;
             text-transform: uppercase;
             margin: 0;
-            font-size: 3.2rem;
-            line-height: 1;
-            font-weight: 700;
-            text-shadow: 0 2px 8px rgba(255,255,255,0.28);
+            font-size: 3.5rem;
+            line-height: 0.95;
+            font-weight: 400;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.24);
+        }
+
+        .brand-divider {
+            width: 132px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--green), transparent);
+            border-radius: 999px;
         }
 
         .brand-sub {
             font-family: 'Cormorant Garamond', serif;
             color: var(--green-dark);
-            font-size: 1rem;
-            letter-spacing: 0.28rem;
+            font-size: 1.05rem;
+            letter-spacing: 0.30rem;
             text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        .brand-divider {
-            width: 120px;
-            height: 2px;
-            background: linear-gradient(to right, transparent, var(--green), transparent);
-            border-radius: 999px;
-            margin-top: 2px;
+            margin-top: -2px;
         }
 
         .quick-nav {
@@ -269,8 +325,6 @@
         .category-title {
             color: var(--green);
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.16rem;
             font-family: 'Cormorant Garamond', serif;
             font-size: 2.05rem;
             margin-bottom: 24px;
@@ -278,6 +332,26 @@
             border-bottom: 1.5px solid rgba(45,90,39,0.30);
             padding-bottom: 10px;
             animation: fadeUp 0.45s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.10rem;
+        }
+
+        .category-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.68);
+            border: 1px solid rgba(45,90,39,0.14);
+            box-shadow: var(--shadow);
+            font-size: 0.95rem;
+            line-height: 1;
+            flex-shrink: 0;
         }
 
         .menu-list {
@@ -300,6 +374,12 @@
             animation: fadeUp 0.42s ease;
         }
 
+        .menu-item.compact {
+            padding-top: 13px;
+            padding-bottom: 13px;
+            align-items: center;
+        }
+
         .menu-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 14px 30px rgba(0,0,0,0.10);
@@ -318,6 +398,10 @@
             color: var(--black);
             margin-bottom: 6px;
             letter-spacing: 0.1px;
+        }
+
+        .menu-item.compact .item-name {
+            margin-bottom: 0;
         }
 
         .item-desc {
@@ -428,28 +512,30 @@
                 padding: 12px 10px;
             }
 
-            .logo-icon {
-                width: 62px;
-                height: 62px;
+            .logo-emblem {
+                width: 78px;
+                height: 78px;
             }
 
-            .logo-icon span {
-                font-size: 1.28rem;
+            .logo-center {
+                width: 46px;
+                height: 46px;
+                font-size: 1.45rem;
             }
 
             .brand-name {
-                font-size: 2.35rem;
-                letter-spacing: 0.18rem;
+                font-size: 2.6rem;
+                letter-spacing: 0.20rem;
             }
 
             .brand-sub {
-                font-size: 0.82rem;
+                font-size: 0.84rem;
                 letter-spacing: 0.16rem;
                 text-align: center;
             }
 
             .brand-divider {
-                width: 84px;
+                width: 90px;
             }
 
             .quick-nav {
@@ -464,13 +550,25 @@
 
             .category-title {
                 font-size: 1.65rem;
-                letter-spacing: 0.10rem;
+                letter-spacing: 0.06rem;
                 margin-bottom: 18px;
+                gap: 8px;
+            }
+
+            .category-icon {
+                width: 26px;
+                height: 26px;
+                font-size: 0.85rem;
             }
 
             .menu-item {
                 padding: 15px 15px;
                 gap: 12px;
+            }
+
+            .menu-item.compact {
+                padding-top: 11px;
+                padding-bottom: 11px;
             }
 
             .item-name {
@@ -501,11 +599,11 @@
 
             <div class="lang-switch" aria-label="Dil seçici">
                 <button id="btn-tr" class="lang-btn active" type="button" onclick="setLang('tr')">
-                    <span class="flag">🇹🇷</span>
+                    <span class="flag-box flag-tr"></span>
                     <span>TR</span>
                 </button>
                 <button id="btn-en" class="lang-btn" type="button" onclick="setLang('en')">
-                    <span class="flag">🇬🇧</span>
+                    <span class="flag-box flag-en"></span>
                     <span>EN</span>
                 </button>
             </div>
@@ -513,7 +611,9 @@
 
         <header>
             <div class="logo-wrap">
-                <div class="logo-icon"><span>M</span></div>
+                <div class="logo-emblem">
+                    <div class="logo-center">M</div>
+                </div>
                 <h1 class="brand-name" id="main-title">MANTUNE</h1>
                 <div class="brand-divider"></div>
                 <div class="brand-sub" id="main-tagline">Bolu'nun Geleneksel Lezzeti</div>
@@ -605,6 +705,23 @@
                 .filter(Boolean);
 
             return parts.map(part => `<span class="price-line">${escapeHtml(part)}</span>`).join('');
+        }
+
+        function getCategoryIcon(categoryText) {
+            const text = (categoryText || '').toLowerCase();
+
+            if (text.includes('gözleme') || text.includes('gozleme')) return '🥟';
+            if (text.includes('mantı') || text.includes('dumpling')) return '🥣';
+            if (text.includes('ızgara') || text.includes('grill')) return '🔥';
+            if (text.includes('kahvalt') || text.includes('breakfast')) return '☀️';
+            if (text.includes('içecek') || text.includes('drink') || text.includes('coffee')) return '☕';
+            if (text.includes('tatlı') || text.includes('dessert')) return '🍮';
+            if (text.includes('ev yemek') || text.includes('home')) return '🍲';
+            if (text.includes('fast food')) return '🍔';
+            if (text.includes('sarma') || text.includes('wrap')) return '🌿';
+            if (text.includes('çiğ köfte') || text.includes('raw')) return '🌶️';
+            if (text.includes('çocuk') || text.includes('kids')) return '🧒';
+            return '•';
         }
 
         function updateStaticTexts() {
@@ -718,10 +835,14 @@
             categoryOrder.forEach(category => {
                 const items = categories[category];
                 const categoryId = 'cat-' + slugify(category);
+                const icon = getCategoryIcon(category);
 
                 let catHtml = `
                     <section class="category-section" id="${escapeHtml(categoryId)}">
-                        <h2 class="category-title">${escapeHtml(category)}</h2>
+                        <h2 class="category-title">
+                            <span class="category-icon">${icon}</span>
+                            <span>${escapeHtml(category)}</span>
+                        </h2>
                         <div class="menu-list">
                 `;
 
@@ -729,11 +850,12 @@
                     const name = getLocalizedName(item);
                     const desc = getLocalizedDescription(item);
                     const price = getLocalizedPrice(item);
+                    const compactClass = !desc ? 'compact' : '';
 
                     if (!name) return;
 
                     catHtml += `
-                        <article class="menu-item">
+                        <article class="menu-item ${compactClass}">
                             <div class="item-info">
                                 <span class="item-name">${escapeHtml(name)}</span>
                                 ${desc ? `<span class="item-desc">${escapeHtml(desc)}</span>` : ''}
