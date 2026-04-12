@@ -28,66 +28,66 @@
             z-index: 1; 
             opacity: 1; 
             pointer-events: none;
-            width: 500px; 
+            width: 550px; /* Biraz daha büyüttüm */
             height: auto;
         }
 
-        .img-left { bottom: -50px; left: -100px; transform: rotate(-10deg); }
-        .img-right { top: 5%; right: -120px; transform: rotate(10deg); }
+        .img-left { bottom: -80px; left: -120px; transform: rotate(-12deg); }
+        .img-right { top: 8%; right: -150px; transform: rotate(12deg); }
 
-        /* YAZI ALANI - Gölgeler kaldırıldı, yazılar tertemiz */
+        /* YAZI ALANI - Tamamen Boşlukta */
         .container { 
             max-width: 600px; 
             margin: 0 auto; 
             padding: 20px; 
             position: relative; 
             z-index: 10; 
-            background: transparent; 
+            background: transparent; /* Hiçbir arka plan yok */
         }
 
-        header { text-align: center; padding: 60px 0; margin-bottom: 20px; }
+        header { text-align: center; padding: 60px 0; }
         h1 { 
             color: var(--red); 
             letter-spacing: 8px; 
             text-transform: uppercase; 
             margin: 0; 
-            font-size: 3rem; 
+            font-size: 3.2rem; 
             font-weight: 900;
         }
         .tagline { color: var(--yellow); font-style: italic; margin-top: 10px; font-size: 1.2rem; }
         
-        .category-section { margin-top: 40px; }
+        .category-section { margin-top: 60px; }
         .category-title { 
             color: var(--red); 
             text-align: center; 
             text-transform: uppercase; 
-            letter-spacing: 3px;
-            font-size: 1.8rem;
-            margin-bottom: 30px;
+            letter-spacing: 4px;
+            font-size: 2rem;
+            margin-bottom: 40px;
             font-weight: 800;
         }
 
         .menu-item { 
             display: flex; 
             justify-content: space-between; 
-            margin-bottom: 30px; 
-            padding: 10px;
-            /* Resimler arkadan belli olsun diye şeffaf siyah şerit */
-            background: rgba(0, 0, 0, 0.4); 
-            border-radius: 8px;
+            align-items: flex-start;
+            margin-bottom: 35px; 
+            padding: 0; /* Şeritleri/kutuları tamamen kaldırdım */
+            background: transparent; 
         }
 
         .item-info { flex: 1; padding-right: 20px; }
         .item-name { 
             font-weight: 700; 
-            font-size: 1.3rem; 
+            font-size: 1.4rem; 
             display: block; 
             color: var(--yellow); 
+            margin-bottom: 5px;
         }
         .item-desc { 
-            font-size: 1rem; 
+            font-size: 1.05rem; 
             color: #ffffff; 
-            opacity: 0.9; 
+            opacity: 0.85; 
             display: block; 
             font-weight: 400;
         }
@@ -95,19 +95,21 @@
         .item-price { 
             color: var(--yellow); 
             font-weight: 900; 
-            font-size: 1.4rem; 
+            font-size: 1.5rem; 
             white-space: nowrap; 
+            margin-top: 2px;
         }
 
         #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.5rem; }
-        footer { text-align: center; padding: 60px; color: #555; font-size: 0.9rem; }
+        footer { text-align: center; padding: 80px 20px; color: #444; font-size: 0.9rem; }
 
+        /* Mobilde resimler ekrana tam otursun */
         @media (max-width: 768px) {
-            .bg-image { width: 320px; }
-            .img-left { left: -80px; bottom: 0; }
-            .img-right { right: -80px; top: 10%; }
-            h1 { font-size: 2.2rem; }
-            .menu-item { background: rgba(0, 0, 0, 0.6); } 
+            .bg-image { width: 400px; } /* Mobilde devasa görünecekler */
+            .img-left { left: -120px; bottom: -20px; }
+            .img-right { right: -150px; top: 12%; }
+            h1 { font-size: 2.5rem; }
+            .container { padding: 15px; }
         }
     </style>
 </head>
@@ -143,7 +145,7 @@
                     complete: (results) => { renderMenu(results.data); }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Hata oluştu.';
+                document.getElementById('loading').innerHTML = 'Hata: Veri çekilemedi.';
             }
         }
 
@@ -165,8 +167,9 @@
                 items.forEach(item => {
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
-                    // Fiyatı string olarak alıyoruz, böylece 150-250 gibi değerler bozulmuyor
-                    const price = String(item['Fiyat (TL)'] || '').trim();
+                    // Fiyatı string olarak alıp olduğu gibi basıyoruz (150-250 hatası çözüldü)
+                    const rawPrice = item['Fiyat (TL)'];
+                    const priceDisplay = rawPrice ? rawPrice : '---';
                     
                     if(!name) return;
                     catHtml += `
@@ -175,7 +178,7 @@
                                 <span class="item-name">${name}</span>
                                 <span class="item-desc">${desc}</span>
                             </div>
-                            <div class="item-price">₺${price}</div>
+                            <div class="item-price">₺${priceDisplay}</div>
                         </div>`;
                 });
                 catHtml += `</div>`;
