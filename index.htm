@@ -6,14 +6,19 @@
     <title>Mantune - Dijital Menü</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&family=Marcellus&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --green: #2d5a27;
-            --black: #000000;
-            --box-bg: rgba(245, 240, 230, 0.5);
+            --green-dark: #1f431b;
+            --black: #111111;
+            --cream: #f5efe2;
+            --box-bg: rgba(245, 240, 230, 0.58);
+            --white-soft: rgba(255,255,255,0.84);
+            --border-soft: rgba(45,90,39,0.16);
             --shadow: 0 10px 24px rgba(0,0,0,0.08);
+            --shadow-strong: 0 16px 34px rgba(0,0,0,0.10);
         }
 
         * {
@@ -25,7 +30,7 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-image: url('arkaplan.png');
             background-size: cover;
             background-position: center;
@@ -35,6 +40,7 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            color: var(--black);
         }
 
         .bg-image {
@@ -59,26 +65,39 @@
         }
 
         .container {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
-            padding: 20px 20px 40px;
+            padding: 20px 18px 42px;
             position: relative;
             z-index: 10;
         }
 
-        .top-actions {
+        .top-bar {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
-            padding-top: 18px;
+            gap: 12px;
+            padding-top: 14px;
+            margin-bottom: 6px;
+        }
+
+        .menu-note {
+            font-size: 0.78rem;
+            color: rgba(17,17,17,0.62);
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(45,90,39,0.10);
+            padding: 8px 12px;
+            border-radius: 999px;
+            box-shadow: var(--shadow);
+            letter-spacing: 0.2px;
         }
 
         .lang-switch {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255,255,255,0.78);
-            border: 1px solid rgba(45,90,39,0.14);
+            background: rgba(255,255,255,0.82);
+            border: 1px solid var(--border-soft);
             border-radius: 999px;
             padding: 6px;
             box-shadow: var(--shadow);
@@ -92,10 +111,10 @@
             padding: 9px 14px;
             border-radius: 999px;
             cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.92rem;
             font-weight: 700;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.2px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -119,35 +138,107 @@
 
         header {
             text-align: center;
-            padding: 38px 0 56px;
+            padding: 26px 0 30px;
             animation: fadeDown 0.7s ease;
         }
 
-        h1 {
-            font-family: 'Playfair Display', serif;
+        .logo-wrap {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.30);
+            padding: 18px 24px;
+            border-radius: 20px;
+        }
+
+        .logo-mark {
+            width: 62px;
+            height: 62px;
+            border: 1.5px solid rgba(45,90,39,0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--green);
-            letter-spacing: 12px;
+            background: rgba(255,255,255,0.58);
+            box-shadow: var(--shadow);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .brand-name {
+            font-family: 'Marcellus', serif;
+            color: var(--green);
+            letter-spacing: 0.36rem;
             text-transform: uppercase;
             margin: 0;
-            font-size: 4rem;
-            font-weight: 900;
-            line-height: 1.1;
+            font-size: 3.4rem;
+            line-height: 1;
+            font-weight: 400;
+            text-shadow: 0 2px 8px rgba(255,255,255,0.28);
+        }
+
+        .brand-divider {
+            width: 110px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--green), transparent);
+            border-radius: 999px;
         }
 
         .tagline {
-            color: var(--green);
-            margin-top: 15px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            letter-spacing: 5px;
+            color: var(--green-dark);
+            margin-top: 2px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            letter-spacing: 0.28rem;
             text-transform: uppercase;
+        }
+
+        .quick-nav {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 4px 2px 12px;
+            margin-bottom: 14px;
+            scrollbar-width: none;
+        }
+
+        .quick-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-chip {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(45,90,39,0.14);
+            background: rgba(255,255,255,0.80);
+            color: var(--green-dark);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        .quick-chip:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-strong);
+            background: rgba(255,255,255,0.92);
         }
 
         #loading {
             text-align: center;
-            margin-top: 120px;
+            margin-top: 110px;
             color: var(--green);
-            font-size: 1.25rem;
+            font-size: 1.08rem;
             font-weight: 700;
             animation: pulse 1.3s infinite ease-in-out;
         }
@@ -157,32 +248,39 @@
         }
 
         .category-section {
-            margin-top: 54px;
+            margin-top: 42px;
+            scroll-margin-top: 24px;
         }
 
         .category-title {
             color: var(--green);
             text-align: center;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            font-size: 1.75rem;
-            margin-bottom: 34px;
+            letter-spacing: 0.20rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.05rem;
+            margin-bottom: 24px;
             font-weight: 700;
-            border-bottom: 2px solid var(--green);
+            border-bottom: 1.5px solid rgba(45,90,39,0.30);
             padding-bottom: 10px;
             animation: fadeUp 0.45s ease;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
         .menu-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             gap: 18px;
-            margin-bottom: 18px;
             background: var(--box-bg);
-            padding: 20px;
-            border-radius: 4px;
-            border-left: 5px solid var(--green);
+            padding: 18px 18px;
+            border-radius: 10px;
+            border-left: 4px solid var(--green);
             box-shadow: var(--shadow);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             animation: fadeUp 0.42s ease;
@@ -195,47 +293,51 @@
 
         .item-info {
             flex: 1;
-            padding-right: 16px;
             min-width: 0;
         }
 
         .item-name {
+            font-family: 'Inter', sans-serif;
             font-weight: 700;
-            font-size: 1.24rem;
+            font-size: 1.08rem;
             display: block;
             color: var(--black);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            letter-spacing: 0.1px;
         }
 
         .item-desc {
-            font-family: 'Caveat', cursive;
-            font-size: 1.45rem;
-            color: #222;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: rgba(17,17,17,0.78);
             display: block;
-            font-weight: 400;
-            line-height: 1.2;
+            font-weight: 500;
+            line-height: 1.55;
             white-space: normal;
             word-break: break-word;
         }
 
         .item-price {
-            color: var(--black);
-            font-weight: 900;
-            font-size: 1.18rem;
+            color: var(--green-dark);
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
             white-space: pre-line;
             text-align: right;
-            line-height: 1.35;
-            min-width: 112px;
-            max-width: 160px;
+            line-height: 1.1;
+            min-width: 96px;
+            max-width: 150px;
             flex-shrink: 0;
+            letter-spacing: 0.2px;
+            padding-top: 1px;
         }
 
         footer {
             text-align: center;
-            padding: 58px 20px 24px;
+            padding: 54px 20px 20px;
             color: rgba(0,0,0,0.55);
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: 0.86rem;
+            font-weight: 600;
         }
 
         @keyframes fadeDown {
@@ -260,8 +362,12 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+            }
+
             .container {
-                padding: 16px 14px 34px;
+                padding: 14px 14px 34px;
             }
 
             .bg-image {
@@ -278,48 +384,84 @@
                 right: -90px;
             }
 
-            .top-actions {
-                justify-content: center;
-                padding-top: 12px;
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
             }
 
-            h1 {
-                font-size: 2.7rem;
-                letter-spacing: 6px;
+            .menu-note {
+                text-align: center;
+            }
+
+            .lang-switch {
+                align-self: center;
+            }
+
+            header {
+                padding: 18px 0 24px;
+            }
+
+            .logo-wrap {
+                padding: 16px 18px;
+                gap: 8px;
+            }
+
+            .logo-mark {
+                width: 54px;
+                height: 54px;
+                font-size: 1.45rem;
+            }
+
+            .brand-name {
+                font-size: 2.55rem;
+                letter-spacing: 0.18rem;
+            }
+
+            .brand-divider {
+                width: 84px;
             }
 
             .tagline {
-                font-size: 0.9rem;
-                letter-spacing: 3px;
+                font-size: 0.76rem;
+                letter-spacing: 0.16rem;
+                line-height: 1.4;
+            }
+
+            .quick-nav {
+                padding-bottom: 8px;
+                margin-bottom: 8px;
+            }
+
+            .quick-chip {
+                padding: 9px 12px;
+                font-size: 0.82rem;
             }
 
             .category-title {
-                font-size: 1.45rem;
-                letter-spacing: 3px;
+                font-size: 1.65rem;
+                letter-spacing: 0.12rem;
+                margin-bottom: 18px;
             }
 
             .menu-item {
-                padding: 15px;
-                align-items: flex-start;
+                padding: 15px 15px;
                 gap: 12px;
             }
 
             .item-name {
-                font-size: 1.08rem;
-            }
-
-            .item-desc {
-                font-size: 1.28rem;
-            }
-
-            .item-price {
-                min-width: 84px;
-                max-width: 110px;
                 font-size: 1rem;
             }
 
-            body {
-                background-attachment: scroll;
+            .item-desc {
+                font-size: 0.89rem;
+                line-height: 1.5;
+            }
+
+            .item-price {
+                min-width: 76px;
+                max-width: 100px;
+                font-size: 1.22rem;
             }
         }
     </style>
@@ -330,7 +472,9 @@
     <img src="manti.png" class="bg-image img-right" alt="Mantı">
 
     <div class="container">
-        <div class="top-actions">
+        <div class="top-bar">
+            <div class="menu-note" id="menu-note">QR Menü • Hızlı Erişim</div>
+
             <div class="lang-switch" aria-label="Dil seçici">
                 <button id="btn-tr" class="lang-btn active" type="button" onclick="setLang('tr')">
                     <span class="flag">🇹🇷</span>
@@ -344,9 +488,15 @@
         </div>
 
         <header>
-            <h1 id="main-title">MANTUNE</h1>
-            <div class="tagline" id="main-tagline">Bolu'nun Geleneksel Lezzeti</div>
+            <div class="logo-wrap">
+                <div class="logo-mark">M</div>
+                <h1 class="brand-name" id="main-title">MANTUNE</h1>
+                <div class="brand-divider"></div>
+                <div class="tagline" id="main-tagline">Bolu'nun Geleneksel Lezzeti</div>
+            </div>
         </header>
+
+        <div id="quick-nav" class="quick-nav"></div>
 
         <div id="loading">Menü Yükleniyor...</div>
         <div id="menu-content"></div>
@@ -374,6 +524,20 @@
         function cleanValue(value) {
             if (value === undefined || value === null) return '';
             return String(value).trim();
+        }
+
+        function slugify(text) {
+            return String(text || '')
+                .toLowerCase()
+                .replace(/ğ/g, 'g')
+                .replace(/ü/g, 'u')
+                .replace(/ş/g, 's')
+                .replace(/ı/g, 'i')
+                .replace(/ö/g, 'o')
+                .replace(/ç/g, 'c')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-');
         }
 
         function getLocalizedValue(item, trKey, enKey) {
@@ -406,11 +570,13 @@
             const title = document.getElementById('main-title');
             const tagline = document.getElementById('main-tagline');
             const loading = document.getElementById('loading');
+            const menuNote = document.getElementById('menu-note');
 
             if (currentLang === 'en') {
                 document.documentElement.lang = 'en';
                 title.textContent = 'MANTUNE';
                 tagline.textContent = 'Traditional Taste of Bolu';
+                menuNote.textContent = 'QR Menu • Quick Access';
                 if (loading.style.display !== 'none') {
                     loading.textContent = 'Loading menu...';
                 }
@@ -418,6 +584,7 @@
                 document.documentElement.lang = 'tr';
                 title.textContent = 'MANTUNE';
                 tagline.textContent = "Bolu'nun Geleneksel Lezzeti";
+                menuNote.textContent = 'QR Menü • Hızlı Erişim';
                 if (loading.style.display !== 'none') {
                     loading.textContent = 'Menü Yükleniyor...';
                 }
@@ -466,6 +633,20 @@
             }
         }
 
+        function renderQuickNav(categoryOrder) {
+            const nav = document.getElementById('quick-nav');
+
+            if (!categoryOrder.length) {
+                nav.innerHTML = '';
+                return;
+            }
+
+            nav.innerHTML = categoryOrder.map(category => {
+                const id = 'cat-' + slugify(category);
+                return `<a class="quick-chip" href="#${id}">${escapeHtml(category)}</a>`;
+            }).join('');
+        }
+
         function renderMenu(data, animate = true) {
             const content = document.getElementById('menu-content');
             const loading = document.getElementById('loading');
@@ -489,14 +670,18 @@
                 categories[localizedCategory].push(item);
             });
 
+            renderQuickNav(categoryOrder);
+
             let fullHtml = '';
 
             categoryOrder.forEach(category => {
                 const items = categories[category];
+                const categoryId = 'cat-' + slugify(category);
 
                 let catHtml = `
-                    <div class="category-section">
+                    <section class="category-section" id="${escapeHtml(categoryId)}">
                         <h2 class="category-title">${escapeHtml(category)}</h2>
+                        <div class="menu-list">
                 `;
 
                 items.forEach(item => {
@@ -507,17 +692,21 @@
                     if (!name) return;
 
                     catHtml += `
-                        <div class="menu-item">
+                        <article class="menu-item">
                             <div class="item-info">
                                 <span class="item-name">${escapeHtml(name)}</span>
                                 ${desc ? `<span class="item-desc">${escapeHtml(desc)}</span>` : ''}
                             </div>
                             <div class="item-price">${escapeHtml(price)}</div>
-                        </div>
+                        </article>
                     `;
                 });
 
-                catHtml += `</div>`;
+                catHtml += `
+                        </div>
+                    </section>
+                `;
+
                 fullHtml += catHtml;
             });
 
