@@ -5,38 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantune - Dijital Menü</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Open+Sans:wght@400;600;700&family=Damion&display=swap" rel="stylesheet">
 
     <style>
         :root { 
-            --gold: #d4b87e;   /* Fiyatlar ve Detaylar İçin Yumuşak Altın */
-            --red: #a33;        /* Kategori Başlıkları İçin Oturaklı Kırmızı */
-            --off-white: #fdfdfd; /* Ana Başlık */
-            --text: #1a1a1a;    /* Genel Metin Siyah */
-            --light-cream: #f4efea; /* Cam Arka Plan */
+            --red: #a33;        /* Kategori Başlıkları */
+            --black: #000000;    /* Metinler */
+            --off-white: #ffffff; /* Ana Başlık */
+            /* YENİ: Yazı kutuları için daha opak, sütlü bej tonu */
+            --box-bg: rgba(245, 240, 230, 0.85); 
         }
         
         body { 
-            font-family: 'Open Sans', Helvetica, Arial, sans-serif; 
-            
-            /* SENİN EKLEDİĞİN YUMUŞAK ARKA PLAN GÖRSELİ */
+            font-family: 'Open Sans', sans-serif; 
             background-image: url('arkaplan.png'); 
             background-size: cover; 
             background-position: center; 
             background-attachment: fixed;
             background-repeat: no-repeat;
-            /* Görsel yüklenene kadar yedek bej */
             background-color: #f1ebd8; 
-            
             margin: 0; 
             padding: 0; 
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* GÖRSELLER (Mantı ve Gözleme) - Sabit ve Net */
         .bg-image {
             position: fixed;
             z-index: 1; 
@@ -44,47 +37,44 @@
             pointer-events: none;
             width: 480px; 
             height: auto;
-            /* Yumuşak arka plana göre çok hafif bir gölge */
-            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.15));
         }
 
         .img-left { bottom: -70px; left: -90px; transform: rotate(-8deg); }
         .img-right { top: 6%; right: -110px; transform: rotate(8deg); }
 
-        /* YAZI ALANI - Lüks Cam Efekti */
         .container { 
             max-width: 650px; 
             margin: 0 auto; 
             padding: 20px; 
             position: relative; 
             z-index: 10; 
-            background: transparent; 
         }
 
-        header { text-align: center; padding: 70px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        header { text-align: center; padding: 70px 0; }
         
-        /* 1. Muazzam Başlık (Mantune) */
         h1 { 
-            font-family: 'Playfair Display', serif; /* Lüks Serif Fontu */
+            font-family: 'Playfair Display', serif;
             color: var(--off-white); 
             letter-spacing: 12px; 
             text-transform: uppercase; 
             margin: 0; 
-            font-size: 5rem; /* Kocaman Boyut */
+            font-size: 5.5rem; 
             font-weight: 900;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Parlaklık ve derinlik */
+            /* Başlığı daha gösterişli yapan derin gölge */
+            text-shadow: 2px 4px 15px rgba(0,0,0,0.4), 0 0 20px rgba(255,255,255,0.2); 
         }
+
         .tagline { 
-            color: var(--text); 
+            color: var(--black); 
             font-style: italic; 
             margin-top: 15px; 
             font-size: 1.3rem; 
-            font-weight: 600; 
+            font-weight: 700; 
         }
         
         .category-section { margin-top: 60px; }
         
-        /* 2. Kategori Başlıkları (Aynı Kırmızı) */
         .category-title { 
             color: var(--red); 
             text-align: center; 
@@ -94,69 +84,62 @@
             margin-bottom: 40px;
             font-weight: 800;
             border-bottom: 3px solid var(--red);
-            display: inline-block;
-            width: 100%;
+            display: block;
             padding-bottom: 15px;
         }
 
-        /* 3. Cam Tasarımı (White Glass) - Oturaklı Beyaz-Krem Cam */
+        /* GÜNCELLEME: Blur kaldırıldı, opaklık artırıldı */
         .menu-item { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start;
-            margin-bottom: 25px; 
-            /* Yarı şeffaf beyaz-krem (Cam Etkisi) */
-            background: rgba(255, 255, 255, 0.4); 
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(8px); /* Arkadaki manzarayı bulanıklaştırarak yazıları öne çıkarır */
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08); /* Hafif gölge */
-            border: 1px solid rgba(255,255,255,0.2); /* Camın kenarı */
+            margin-bottom: 20px; 
+            background: var(--box-bg); /* Daha opak bej arka plan */
+            padding: 22px;
+            border-radius: 12px;
+            backdrop-filter: none; /* Blur TAMAMEN KALDIRILDI */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .item-info { flex: 1; padding-right: 25px; }
         
-        /* 4. Ürün İsimleri (Aynı Siyah/Serif) */
         .item-name { 
-            font-family: 'Playfair Display', serif; /* Kategori gibi Serif fontu */
+            font-family: 'Playfair Display', serif;
             font-weight: 700; 
-            font-size: 1.4rem; 
+            font-size: 1.45rem; 
             display: block; 
-            color: var(--text); 
+            color: var(--black); 
             margin-bottom: 6px; 
         }
         
-        /* 5. Açıklamalar (El Yazısı) */
         .item-desc { 
-            font-family: 'Damion', cursive; /* Lüks El Yazısı Fontu */
-            font-size: 1.2rem; 
-            color: var(--text); 
-            opacity: 0.95; 
+            font-family: 'Damion', cursive; 
+            font-size: 1.25rem; 
+            color: var(--black); 
             display: block; 
             font-weight: 400;
+            line-height: 1.4;
         }
         
-        /* 6. Fiyatlar (Aynı Altın/Siyah) */
         .item-price { 
-            color: var(--text); 
+            color: var(--black); 
             font-weight: 900; 
-            font-size: 1.5rem; 
+            font-size: 1.6rem; 
             white-space: nowrap; 
-            margin-top: 3px;
         }
 
         #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.6rem; font-weight: bold; }
-        footer { text-align: center; padding: 70px; color: rgba(0,0,0,0.4); font-size: 0.95rem; font-weight: 600; }
+        footer { text-align: center; padding: 70px; color: rgba(0,0,0,0.5); font-size: 1rem; font-weight: 700; }
 
         @media (max-width: 768px) {
             .bg-image { width: 320px; }
             .img-left { left: -80px; bottom: -10px; }
             .img-right { right: -90px; top: 10%; }
-            h1 { font-size: 3.5rem; letter-spacing: 8px; } /* Mobilde başlığı küçültüyoruz */
-            .menu-item { flex-direction: column; align-items: flex-start; padding: 15px; }
-            .item-price { margin-top: 10px; margin-left: 0; }
-            .item-info { padding-right: 0; }
-            body { background-attachment: scroll; } /* Mobil performansı */
+            h1 { font-size: 3.2rem; letter-spacing: 6px; }
+            .menu-item { flex-direction: column; padding: 18px; }
+            .item-price { margin-top: 12px; }
+            body { background-attachment: scroll; }
         }
     </style>
 </head>
@@ -214,10 +197,7 @@
                 items.forEach(item => {
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
-                    
-                    // Fiyatı hiçbir işleme sokmadan doğrudan çekiyoruz (150-250 hatasını kökten çözer)
-                    let priceVal = item['Fiyat (TL)'];
-                    if (priceVal === undefined || priceVal === null) priceVal = '---';
+                    let priceVal = item['Fiyat (TL)'] || '---';
                     
                     if(!name) return;
                     catHtml += `
