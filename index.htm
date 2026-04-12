@@ -7,21 +7,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root { 
-            --red: #d90429;    /* Başlıklar için kırmızı */
-            --black: #1a1a1a;  /* Metinler için siyah */
+            --red: #d90429;    
+            --black: #000000;  /* Tam siyah yaptık */
         }
         
         body { 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            
-            /* SENİN EKLEYECEĞİN ARKA PLAN GÖRSELİ */
             background-image: url('arkaplan.png'); 
             background-size: cover; 
             background-position: center; 
-            background-attachment: fixed; /* Parallax etkisi: Menü kayarken arka plan sabit kalır */
+            background-attachment: fixed;
             background-repeat: no-repeat;
-            background-color: #00ced1; /* Görsel yüklenene kadar yedek turkuaz */
-            
+            background-color: #00ced1;
             margin: 0; 
             padding: 0; 
             min-height: 100vh;
@@ -29,7 +26,7 @@
             position: relative;
         }
 
-        /* ÖN PLANDAKİ MANTI VE GÖZLEME - Sabit ve Net */
+        /* ÖN PLANDAKİ GÖRSELLER */
         .bg-image {
             position: fixed;
             z-index: 1; 
@@ -37,13 +34,12 @@
             pointer-events: none;
             width: 500px; 
             height: auto;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
         }
 
         .img-left { bottom: -60px; left: -100px; transform: rotate(-10deg); }
         .img-right { top: 7%; right: -120px; transform: rotate(10deg); }
 
-        /* YAZI ALANI - Şeffaf Şeritli ve Temiz */
         .container { 
             max-width: 600px; 
             margin: 0 auto; 
@@ -62,7 +58,7 @@
             font-size: 3rem; 
             font-weight: 900;
         }
-        .tagline { color: var(--black); font-style: italic; margin-top: 10px; font-size: 1.2rem; font-weight: 600; }
+        .tagline { color: var(--black); font-style: italic; margin-top: 10px; font-size: 1.2rem; font-weight: 700; }
         
         .category-section { margin-top: 50px; }
         .category-title { 
@@ -78,31 +74,35 @@
             padding-bottom: 10px;
         }
 
+        /* YENİ GÜNCELLEME: Blur kalktı, daha koyu gölgelendirme geldi */
         .menu-item { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start;
-            margin-bottom: 25px; 
-            background: rgba(255, 255, 255, 0.2); /* Senin arka planının üstünde hafif belli olması için */
+            margin-bottom: 15px; 
+            /* Arka planı hafif karartıyoruz (Siyahın %30 şeffaf hali) */
+            background: rgba(0, 0, 0, 0.12); 
             padding: 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(4px); /* Arka planı hafif bulanıklaştırarak yazıları öne çıkarır */
+            border-radius: 10px;
+            /* Bulanıklığı (blur) sildik */
+            backdrop-filter: none; 
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .item-info { flex: 1; padding-right: 20px; }
         .item-name { font-weight: 700; font-size: 1.3rem; display: block; color: var(--black); margin-bottom: 4px; }
-        .item-desc { font-size: 1rem; color: var(--black); opacity: 0.9; display: block; font-weight: 500; }
+        .item-desc { font-size: 1rem; color: var(--black); opacity: 0.9; display: block; font-weight: 600; }
         .item-price { color: var(--black); font-weight: 900; font-size: 1.4rem; white-space: nowrap; }
 
         #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.5rem; font-weight: bold; }
-        footer { text-align: center; padding: 60px; color: rgba(0,0,0,0.5); font-size: 0.9rem; font-weight: bold; }
+        footer { text-align: center; padding: 60px; color: rgba(0,0,0,0.6); font-size: 0.9rem; font-weight: bold; }
 
         @media (max-width: 768px) {
             .bg-image { width: 340px; }
             .img-left { left: -90px; bottom: -20px; }
             .img-right { right: -100px; top: 12%; }
             h1 { font-size: 2.3rem; }
-            body { background-attachment: scroll; } /* Mobil performansı için */
+            body { background-attachment: scroll; }
         }
     </style>
 </head>
@@ -138,7 +138,7 @@
                     complete: (results) => { renderMenu(results.data); }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Bağlantı Hatası.';
+                document.getElementById('loading').innerHTML = 'Veri bağlantısı kurulamadı.';
             }
         }
 
@@ -160,8 +160,6 @@
                 items.forEach(item => {
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
-                    
-                    // Fiyatı hiçbir işleme sokmadan doğrudan çekiyoruz (150-250 hatasını çözer)
                     let priceVal = item['Fiyat (TL)'];
                     if (priceVal === undefined || priceVal === null) priceVal = '---';
                     
