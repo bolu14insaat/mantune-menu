@@ -29,13 +29,31 @@
             content: ""; flex: 1; height: 1px; background: #333; margin: 0 15px;
         }
 
+        /* YENİ: Menü elemanı düzeni (resim için) */
         .menu-item { 
             display: flex; 
-            justify-content: space-between; 
-            margin-bottom: 20px; 
-            padding-bottom: 10px;
+            align-items: center; /* Resmi ve yazıları dikeyde ortalar */
+            margin-bottom: 25px; 
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1a1a1a; /* Hafif bir ayırıcı */
         }
-        .item-info { flex: 1; padding-right: 20px; }
+
+        /* YENİ: Resim stili */
+        .item-img-container {
+            width: 70px; /* Resim genişliği */
+            height: 70px; /* Resim yüksekliği */
+            margin-right: 15px; /* Yazı ile ara boşluk */
+            flex-shrink: 0; /* Resmin sıkışmasını engeller */
+        }
+        .item-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Resmi bozmadan kare içine sığdırır */
+            border-radius: 8px; /* Köşeleri yumuşatır */
+            border: 1px solid #333; /* Hafif çerçeve */
+        }
+
+        .item-info { flex: 1; padding-right: 10px; }
         .item-name { font-weight: 600; font-size: 1.05rem; display: block; color: var(--text); }
         .item-desc { font-size: 0.85rem; color: #999; margin-top: 4px; display: block; font-weight: 300; }
         .item-price { color: var(--gold); font-weight: 700; font-size: 1.1rem; white-space: nowrap; }
@@ -101,6 +119,16 @@
             for (const [category, items] of Object.entries(categories)) {
                 let catHtml = `<div class="category-section"><h2 class="category-title">${category}</h2>`;
                 
+                // GÜNCELLEME: Kategori ismine göre resim belirleme
+                let categoryImg = '';
+                const lowerCat = category.toLowerCase();
+                if (lowerCat.includes('mantı')) {
+                    categoryImg = 'manti.png'; // GitHub'daki dosya adı
+                } else if (lowerCat.includes('gözleme')) {
+                    categoryImg = 'gozleme.png'; // GitHub'daki dosya adı
+                }
+                // Diğer kategoriler (örneğin Ev Yemekleri) için resim eklemedik.
+
                 items.forEach(item => {
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
@@ -108,8 +136,15 @@
                     
                     if(!name) return;
 
+                    // Eğer bu kategori için bir resim varsa HTML'e ekle
+                    const imgTag = categoryImg ? `
+                        <div class="item-img-container">
+                            <img src="${categoryImg}" class="item-img" alt="${name}">
+                        </div>` : '';
+
                     catHtml += `
                         <div class="menu-item">
+                            ${imgTag}
                             <div class="item-info">
                                 <span class="item-name">${name}</span>
                                 <span class="item-desc">${desc}</span>
