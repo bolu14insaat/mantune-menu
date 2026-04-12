@@ -7,15 +7,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root { 
-            --red: #d90429;    
-            --black: #1a1a1a;  
+            --red: #d90429;    /* Başlıklar için kırmızı */
+            --black: #1a1a1a;  /* Metinler için siyah */
         }
         
         body { 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            /* GÖKYÜZÜ GEÇİŞİ: Açık turkuazdan derin maviye */
-            background: radial-gradient(circle at center, #7de2d1 0%, #339989 50%, #134e5e 100%);
-            background-attachment: fixed;
+            
+            /* SENİN EKLEYECEĞİN ARKA PLAN GÖRSELİ */
+            background-image: url('arkaplan.png'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; /* Parallax etkisi: Menü kayarken arka plan sabit kalır */
+            background-repeat: no-repeat;
+            background-color: #00ced1; /* Görsel yüklenene kadar yedek turkuaz */
+            
             margin: 0; 
             padding: 0; 
             min-height: 100vh;
@@ -23,7 +29,7 @@
             position: relative;
         }
 
-        /* GÖRSELLER - Sabit ve Tam Net */
+        /* ÖN PLANDAKİ MANTI VE GÖZLEME - Sabit ve Net */
         .bg-image {
             position: fixed;
             z-index: 1; 
@@ -31,13 +37,13 @@
             pointer-events: none;
             width: 500px; 
             height: auto;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));
         }
 
-        .img-left { bottom: -60px; left: -110px; transform: rotate(-10deg); }
-        .img-right { top: 7%; right: -130px; transform: rotate(10deg); }
+        .img-left { bottom: -60px; left: -100px; transform: rotate(-10deg); }
+        .img-right { top: 7%; right: -120px; transform: rotate(10deg); }
 
-        /* YAZI ALANI */
+        /* YAZI ALANI - Şeffaf Şeritli ve Temiz */
         .container { 
             max-width: 600px; 
             margin: 0 auto; 
@@ -76,35 +82,17 @@
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start;
-            margin-bottom: 30px; 
-            background: rgba(255, 255, 255, 0.15); /* Hafif beyaz bulut etkisi */
+            margin-bottom: 25px; 
+            background: rgba(255, 255, 255, 0.2); /* Senin arka planının üstünde hafif belli olması için */
             padding: 15px;
             border-radius: 12px;
-            backdrop-filter: blur(3px); /* Arkadaki rengi hafif dağıtır */
+            backdrop-filter: blur(4px); /* Arka planı hafif bulanıklaştırarak yazıları öne çıkarır */
         }
 
         .item-info { flex: 1; padding-right: 20px; }
-        .item-name { 
-            font-weight: 700; 
-            font-size: 1.3rem; 
-            display: block; 
-            color: var(--black); 
-            margin-bottom: 4px;
-        }
-        .item-desc { 
-            font-size: 1rem; 
-            color: var(--black); 
-            opacity: 0.9; 
-            display: block; 
-            font-weight: 500;
-        }
-        
-        .item-price { 
-            color: var(--black); 
-            font-weight: 900; 
-            font-size: 1.4rem; 
-            white-space: nowrap; 
-        }
+        .item-name { font-weight: 700; font-size: 1.3rem; display: block; color: var(--black); margin-bottom: 4px; }
+        .item-desc { font-size: 1rem; color: var(--black); opacity: 0.9; display: block; font-weight: 500; }
+        .item-price { color: var(--black); font-weight: 900; font-size: 1.4rem; white-space: nowrap; }
 
         #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.5rem; font-weight: bold; }
         footer { text-align: center; padding: 60px; color: rgba(0,0,0,0.5); font-size: 0.9rem; font-weight: bold; }
@@ -114,6 +102,7 @@
             .img-left { left: -90px; bottom: -20px; }
             .img-right { right: -100px; top: 12%; }
             h1 { font-size: 2.3rem; }
+            body { background-attachment: scroll; } /* Mobil performansı için */
         }
     </style>
 </head>
@@ -172,7 +161,7 @@
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
                     
-                    // Fiyat kısmını ham veri olarak alıyoruz (150-250 hatası yaşanmaz)
+                    // Fiyatı hiçbir işleme sokmadan doğrudan çekiyoruz (150-250 hatasını çözer)
                     let priceVal = item['Fiyat (TL)'];
                     if (priceVal === undefined || priceVal === null) priceVal = '---';
                     
