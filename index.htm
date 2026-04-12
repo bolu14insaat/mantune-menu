@@ -16,63 +16,50 @@
             padding: 0; 
             line-height: 1.6;
             min-height: 100vh;
-            /* Resimler yanlara taşacağı için taşmayı gizliyoruz ama dikey kaymayı bırakıyoruz */
-            overflow-x: hidden; 
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* YENİ YAPISI: Ana Taşıyıcı (Resimleri ve Menüyü kapsar) */
-        .main-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            position: relative;
-            max-width: 1600px; /* Çok geniş ekranlar için sınır */
-            margin: 0 auto;
-            padding: 0 50px; /* Yanlarda resimler için boşluk */
-        }
-
-        /* ÖN PLANDAKİ GÖRSELLER - Yanlara Sabitlenmiş ve Net */
-        .side-image {
-            position: absolute; /* .main-wrapper'a göre konumlanır */
-            z-index: 10; /* Yazıların (z-index: 5) üstünde dursunlar, tam ön plan */
-            opacity: 1; /* TAM NETLİK */
-            pointer-events: none; /* Üzerine tıklanmasın, alttaki menüye tıklanabilsin */
+        /* ARKA PLAN GÖRSELLERİ - Ekranda Sabit ve Büyük */
+        .bg-image {
+            position: fixed; /* Sayfayı kaydırsan da ekranda sabit kalır */
+            z-index: -1; /* Menü yazılarının arkasında kalır */
+            opacity: 0.5; /* Görünürlük seviyesi (Artırıldı) */
+            pointer-events: none;
+            width: 600px; /* Dev boyut */
             height: auto;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.8)); /* Derin gölge */
+            filter: drop-shadow(0 0 40px rgba(0,0,0,0.8));
         }
 
+        /* Sol Alt Köşedeki Mantı */
         .img-left {
-            width: 450px; /* Webde kocaman tabak */
-            left: 0; /* Wrapper'ın sol kenarı */
-            top: 250px; /* Mantı kategorisinin tahmini hizası */
-            transform: rotate(-5deg);
+            bottom: -100px;
+            left: -150px;
+            transform: rotate(-15deg);
         }
 
+        /* Sağ Üst Köşedeki Gözleme */
         .img-right {
-            width: 480px; /* Gözleme biraz daha büyük dursun */
-            right: 0; /* Wrapper'ın sağ kenarı */
-            top: 600px; /* Gözleme kategorisinin tahmini hizası */
-            transform: rotate(5deg);
+            top: 5%;
+            right: -200px;
+            transform: rotate(15deg);
         }
 
-        /* Menü Bloğu */
         .container { 
-            flex: 0 0 600px; /* Genişliği 600px'de sabitle */
-            max-width: 600px; 
-            margin: 40px 0; /* Üst/alt boşluk */
-            padding: 30px; 
+            max-width: 650px; 
+            margin: 0 auto; 
+            padding: 20px; 
             position: relative; 
-            z-index: 5; /* Resimlerin altında kalsın */
-            background-color: var(--card); /* Koyu kart arka planı */
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
-            border: 1px solid #222; /* Hafif çerçeve */
+            z-index: 1; 
+            /* Yazıların resimlerin üstünde okunması için hafif karartma */
+            background: rgba(11, 11, 11, 0.8);
+            box-shadow: 0 0 100px rgba(0,0,0,1);
+            min-height: 100vh;
         }
 
-        header { text-align: center; padding: 20px 0 40px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
-        h1 { color: var(--gold); letter-spacing: 6px; text-transform: uppercase; margin: 0; font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .tagline { color: #888; font-style: italic; margin-top: 10px; font-size: 1rem; }
+        header { text-align: center; padding: 60px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
+        h1 { color: var(--gold); letter-spacing: 8px; text-transform: uppercase; margin: 0; font-size: 2.5rem; }
+        .tagline { color: #888; font-style: italic; margin-top: 15px; font-size: 1rem; }
         
         .category-section { margin-top: 50px; }
         .category-title { 
@@ -93,85 +80,45 @@
         .menu-item { 
             display: flex; 
             justify-content: space-between; 
-            align-items: flex-start;
             margin-bottom: 25px; 
             padding-bottom: 15px;
             border-bottom: 1px solid #1a1a1a;
         }
 
-        .item-info { flex: 1; padding-right: 25px; }
-        .item-name { font-weight: 600; font-size: 1.1rem; display: block; color: var(--text); }
-        .item-desc { font-size: 0.9rem; color: #aaa; margin-top: 5px; display: block; font-weight: 300; }
-        .item-price { color: var(--gold); font-weight: 700; font-size: 1.2rem; white-space: nowrap; margin-top: 2px; }
+        .item-info { flex: 1; padding-right: 20px; }
+        .item-name { font-weight: 600; font-size: 1.15rem; display: block; color: var(--text); }
+        .item-desc { font-size: 0.95rem; color: #999; margin-top: 5px; display: block; font-weight: 300; }
+        .item-price { color: var(--gold); font-weight: 700; font-size: 1.25rem; white-space: nowrap; }
 
-        #loading { text-align: center; margin-top: 100px; color: var(--gold); font-size: 1.3rem; letter-spacing: 1px; }
-        footer { text-align: center; padding: 50px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; margin-top: 50px; }
+        #loading { text-align: center; margin-top: 150px; color: var(--gold); font-size: 1.3rem; }
+        footer { text-align: center; padding: 60px; color: #444; font-size: 0.9rem; }
 
-        /* MOBİL UYUMLULUK - Devrimsel Değişiklik */
-        @media (max-width: 1100px) {
-            .main-wrapper { padding: 0 15px; } /* Yan boşlukları daralt */
-            
-            /* Mobilde resimleri yanlardan alıp, menünün üstüne/altına büyükçe koyuyoruz */
-            .side-image {
-                position: relative; /* Statik düzene sok */
-                display: block;
-                margin: 0 auto;
-                opacity: 1;
-                filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
-                transform: none !important; /* Döndürmeyi kaldır */
-            }
-            
-            .img-left {
-                width: 90%; /* Ekranın çoğunu kaplasın */
-                max-width: 400px;
-                left: auto;
-                top: 20px; /* Menünün hemen üstünde */
-                margin-bottom: -30px; /* Menüye biraz yaklaşsın */
-            }
-
-            .img-right {
-                width: 95%; /* Gözleme biraz daha büyük */
-                max-width: 430px;
-                right: auto;
-                top: 0;
-                margin-top: 30px; /* Fiyatlardan sonra */
-                order: 10; /* En alta at (Flexbox order) */
-            }
-            
-            .container { 
-                flex: 1 1 auto; /* Genişliği ekrana yay */
-                width: 100%;
-                margin: 0 auto; 
-                border-radius: 0; /* Köşeleri kes */
-                border: none;
-                box-shadow: none;
-            }
-            
-            /* Flex düzenini dikey yap (Gözlemeyi alta atmak için) */
-            .main-wrapper { flex-direction: column; align-items: center; }
+        /* Mobil Uyumluluk */
+        @media (max-width: 768px) {
+            .bg-image { width: 350px; opacity: 0.4; }
+            .img-left { left: -80px; bottom: -50px; }
+            .img-right { right: -100px; top: 10%; }
+            .container { padding: 15px; background: rgba(11, 11, 11, 0.85); }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-wrapper">
-        <img src="manti.png" class="side-image img-left" alt="Mantı">
-        
-        <div class="container">
-            <header>
-                <h1>MANTUNE</h1>
-                <div class="tagline">Mantı • Gözleme • Ev Yemekleri</div>
-            </header>
-            
-            <div id="loading">Menü Yükleniyor...</div>
-            <div id="menu-content"></div>
+    <img src="manti.png" class="bg-image img-left" alt="Mantı">
+    <img src="gozleme.png" class="bg-image img-right" alt="Gözleme">
 
-            <footer>
-                &copy; 2026 Mantune Bolu. Tüm hakları saklıdır.
-            </footer>
-        </div>
+    <div class="container">
+        <header>
+            <h1>MANTUNE</h1>
+            <div class="tagline">Mantı • Gözleme • Ev Yemekleri</div>
+        </header>
         
-        <img src="gozleme.png" class="side-image img-right" alt="Gözleme">
+        <div id="loading">Menü Hazırlanıyor...</div>
+        <div id="menu-content"></div>
+
+        <footer>
+            &copy; 2026 Mantune Bolu. Tüm hakları saklıdır.
+        </footer>
     </div>
 
     <script>
@@ -191,7 +138,7 @@
                     }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Menü şu an yüklenemiyor.';
+                document.getElementById('loading').innerHTML = 'Menü yüklenirken bir sorun oluştu.';
                 console.error(error);
             }
         }
