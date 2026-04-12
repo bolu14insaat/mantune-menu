@@ -16,30 +16,31 @@
             padding: 0; 
             line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden; /* Resimler taşarsa sağa kayma olmasın diye */
+            overflow-x: hidden; /* Sağdaki resim taşarsa kayma olmasın diye */
+            position: relative;
         }
 
-        /* DEKORATİF GÖRSELLER - Büyütülmüş ve Ayarlanmış */
+        /* DEKORATİF GÖRSELLER - Muazzam Boyutlar ve Netlik */
         .bg-image {
             position: fixed;
-            z-index: -1;
-            opacity: 0.25; /* Şeffaflığı buradan ayarlayabilirsin */
+            z-index: -1; /* İçeriğin arkasında ama belirgin */
+            opacity: 0.6; /* Çok daha net ve görünür */
             pointer-events: none;
-            width: 350px; /* Görselleri buradan büyütebilirsin */
+            width: 550px; /* Muazzam boyut! */
             height: auto;
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5)); /* Derinlik katar */
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.7)); /* Derinlik katar */
         }
 
         .img-left {
-            bottom: -50px;
-            left: -100px; /* Biraz dışarı taşırdık ki daha doğal dursun */
-            transform: rotate(-15deg);
+            bottom: -80px;
+            left: -150px; /* Daha fazla dışarı taşırdık */
+            transform: rotate(-10deg);
         }
 
         .img-right {
-            top: 10%;
-            right: -120px;
-            transform: rotate(15deg);
+            top: 15%;
+            right: -180px; /* Daha fazla dışarı taşırdık */
+            transform: rotate(10deg);
         }
 
         .container { 
@@ -48,8 +49,12 @@
             padding: 20px; 
             position: relative; 
             z-index: 1; 
-            background: rgba(11, 11, 11, 0.7); /* Arkadaki resimlerin üstüne gelince yazı okunsun diye hafif karartma */
-            border-radius: 15px;
+            /* Yazıların okunması için daha koyu arka plan gölgesi */
+            background: rgba(11, 11, 11, 0.85); 
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            border-radius: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         header { text-align: center; padding: 40px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
@@ -89,9 +94,10 @@
 
         /* Mobilde resim ayarları */
         @media (max-width: 768px) {
-            .bg-image { width: 220px; opacity: 0.2; }
-            .img-left { left: -60px; bottom: 0; }
-            .img-right { right: -80px; top: 5%; }
+            .bg-image { width: 350px; opacity: 0.5; }
+            .img-left { left: -100px; bottom: -50px; }
+            .img-right { right: -120px; top: 10%; }
+            .container { margin-top: 10px; margin-bottom: 10px; border-radius: 10px; }
         }
     </style>
 </head>
