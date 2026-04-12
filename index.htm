@@ -5,20 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantune - Dijital Menü</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Open+Sans:wght@400;600;700&family=Damion&display=swap" rel="stylesheet">
+
     <style>
         :root { 
-            --red: #d90429;    
-            --black: #000000;  /* Tam siyah yaptık */
+            --gold: #d4b87e;   /* Fiyatlar ve Detaylar İçin Yumuşak Altın */
+            --red: #a33;        /* Kategori Başlıkları İçin Oturaklı Kırmızı */
+            --off-white: #fdfdfd; /* Ana Başlık */
+            --text: #1a1a1a;    /* Genel Metin Siyah */
+            --light-cream: #f4efea; /* Cam Arka Plan */
         }
         
         body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif; 
+            
+            /* SENİN EKLEDİĞİN YUMUŞAK ARKA PLAN GÖRSELİ */
             background-image: url('arkaplan.png'); 
             background-size: cover; 
             background-position: center; 
             background-attachment: fixed;
             background-repeat: no-repeat;
-            background-color: #00ced1;
+            /* Görsel yüklenene kadar yedek bej */
+            background-color: #f1ebd8; 
+            
             margin: 0; 
             padding: 0; 
             min-height: 100vh;
@@ -26,22 +36,24 @@
             position: relative;
         }
 
-        /* ÖN PLANDAKİ GÖRSELLER */
+        /* GÖRSELLER (Mantı ve Gözleme) - Sabit ve Net */
         .bg-image {
             position: fixed;
             z-index: 1; 
             opacity: 1; 
             pointer-events: none;
-            width: 500px; 
+            width: 480px; 
             height: auto;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+            /* Yumuşak arka plana göre çok hafif bir gölge */
+            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.1));
         }
 
-        .img-left { bottom: -60px; left: -100px; transform: rotate(-10deg); }
-        .img-right { top: 7%; right: -120px; transform: rotate(10deg); }
+        .img-left { bottom: -70px; left: -90px; transform: rotate(-8deg); }
+        .img-right { top: 6%; right: -110px; transform: rotate(8deg); }
 
+        /* YAZI ALANI - Lüks Cam Efekti */
         .container { 
-            max-width: 600px; 
+            max-width: 650px; 
             margin: 0 auto; 
             padding: 20px; 
             position: relative; 
@@ -49,60 +61,102 @@
             background: transparent; 
         }
 
-        header { text-align: center; padding: 60px 0; }
+        header { text-align: center; padding: 70px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        
+        /* 1. Muazzam Başlık (Mantune) */
         h1 { 
-            color: var(--red); 
-            letter-spacing: 8px; 
+            font-family: 'Playfair Display', serif; /* Lüks Serif Fontu */
+            color: var(--off-white); 
+            letter-spacing: 12px; 
             text-transform: uppercase; 
             margin: 0; 
-            font-size: 3rem; 
+            font-size: 5rem; /* Kocaman Boyut */
             font-weight: 900;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Parlaklık ve derinlik */
         }
-        .tagline { color: var(--black); font-style: italic; margin-top: 10px; font-size: 1.2rem; font-weight: 700; }
+        .tagline { 
+            color: var(--text); 
+            font-style: italic; 
+            margin-top: 15px; 
+            font-size: 1.3rem; 
+            font-weight: 600; 
+        }
         
-        .category-section { margin-top: 50px; }
+        .category-section { margin-top: 60px; }
+        
+        /* 2. Kategori Başlıkları (Aynı Kırmızı) */
         .category-title { 
             color: var(--red); 
             text-align: center; 
             text-transform: uppercase; 
-            letter-spacing: 3px;
-            font-size: 1.8rem;
-            margin-bottom: 35px;
+            letter-spacing: 4px;
+            font-size: 2rem;
+            margin-bottom: 40px;
             font-weight: 800;
             border-bottom: 3px solid var(--red);
-            display: block;
-            padding-bottom: 10px;
+            display: inline-block;
+            width: 100%;
+            padding-bottom: 15px;
         }
 
-        /* YENİ GÜNCELLEME: Blur kalktı, daha koyu gölgelendirme geldi */
+        /* 3. Cam Tasarımı (White Glass) - Oturaklı Beyaz-Krem Cam */
         .menu-item { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start;
-            margin-bottom: 15px; 
-            /* Arka planı hafif karartıyoruz (Siyahın %30 şeffaf hali) */
-            background: rgba(0, 0, 0, 0.12); 
-            padding: 15px;
-            border-radius: 10px;
-            /* Bulanıklığı (blur) sildik */
-            backdrop-filter: none; 
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 25px; 
+            /* Yarı şeffaf beyaz-krem (Cam Etkisi) */
+            background: rgba(255, 255, 255, 0.4); 
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(8px); /* Arkadaki manzarayı bulanıklaştırarak yazıları öne çıkarır */
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); /* Hafif gölge */
+            border: 1px solid rgba(255,255,255,0.2); /* Camın kenarı */
         }
 
-        .item-info { flex: 1; padding-right: 20px; }
-        .item-name { font-weight: 700; font-size: 1.3rem; display: block; color: var(--black); margin-bottom: 4px; }
-        .item-desc { font-size: 1rem; color: var(--black); opacity: 0.9; display: block; font-weight: 600; }
-        .item-price { color: var(--black); font-weight: 900; font-size: 1.4rem; white-space: nowrap; }
+        .item-info { flex: 1; padding-right: 25px; }
+        
+        /* 4. Ürün İsimleri (Aynı Siyah/Serif) */
+        .item-name { 
+            font-family: 'Playfair Display', serif; /* Kategori gibi Serif fontu */
+            font-weight: 700; 
+            font-size: 1.4rem; 
+            display: block; 
+            color: var(--text); 
+            margin-bottom: 6px; 
+        }
+        
+        /* 5. Açıklamalar (El Yazısı) */
+        .item-desc { 
+            font-family: 'Damion', cursive; /* Lüks El Yazısı Fontu */
+            font-size: 1.2rem; 
+            color: var(--text); 
+            opacity: 0.95; 
+            display: block; 
+            font-weight: 400;
+        }
+        
+        /* 6. Fiyatlar (Aynı Altın/Siyah) */
+        .item-price { 
+            color: var(--text); 
+            font-weight: 900; 
+            font-size: 1.5rem; 
+            white-space: nowrap; 
+            margin-top: 3px;
+        }
 
-        #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.5rem; font-weight: bold; }
-        footer { text-align: center; padding: 60px; color: rgba(0,0,0,0.6); font-size: 0.9rem; font-weight: bold; }
+        #loading { text-align: center; margin-top: 150px; color: var(--red); font-size: 1.6rem; font-weight: bold; }
+        footer { text-align: center; padding: 70px; color: rgba(0,0,0,0.4); font-size: 0.95rem; font-weight: 600; }
 
         @media (max-width: 768px) {
-            .bg-image { width: 340px; }
-            .img-left { left: -90px; bottom: -20px; }
-            .img-right { right: -100px; top: 12%; }
-            h1 { font-size: 2.3rem; }
-            body { background-attachment: scroll; }
+            .bg-image { width: 320px; }
+            .img-left { left: -80px; bottom: -10px; }
+            .img-right { right: -90px; top: 10%; }
+            h1 { font-size: 3.5rem; letter-spacing: 8px; } /* Mobilde başlığı küçültüyoruz */
+            .menu-item { flex-direction: column; align-items: flex-start; padding: 15px; }
+            .item-price { margin-top: 10px; margin-left: 0; }
+            .item-info { padding-right: 0; }
+            body { background-attachment: scroll; } /* Mobil performansı */
         }
     </style>
 </head>
@@ -117,7 +171,7 @@
             <div class="tagline">Mantı • Gözleme • Ev Yemekleri</div>
         </header>
         
-        <div id="loading">Menü Yükleniyor...</div>
+        <div id="loading">Menü Hazırlanıyor...</div>
         <div id="menu-content"></div>
 
         <footer>
@@ -138,7 +192,7 @@
                     complete: (results) => { renderMenu(results.data); }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Veri bağlantısı kurulamadı.';
+                document.getElementById('loading').innerHTML = 'Bağlantı Hatası.';
             }
         }
 
@@ -160,6 +214,8 @@
                 items.forEach(item => {
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
+                    
+                    // Fiyatı hiçbir işleme sokmadan doğrudan çekiyoruz (150-250 hatasını kökten çözer)
                     let priceVal = item['Fiyat (TL)'];
                     if (priceVal === undefined || priceVal === null) priceVal = '---';
                     
