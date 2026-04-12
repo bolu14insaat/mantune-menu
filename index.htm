@@ -10,7 +10,7 @@
 
     <style>
         :root { 
-            --green: #a33;       /* Kategori Başlıkları, Tagline ve artık Ana Başlık Rengi */
+            --green: #2d5a27;    /* İstediğin Net Yeşil Tonu */
             --black: #000000;    
             --box-bg: rgba(245, 240, 230, 0.5); /* Şeffaf ton */
         }
@@ -50,10 +50,10 @@
 
         header { text-align: center; padding: 70px 0; }
         
-        /* GÜNCELLEME: Ana Başlık Rengi Artık Kırmızımsı Yeşil */
+        /* Ana Başlık Artık Yeşil */
         h1 { 
             font-family: 'Playfair Display', serif;
-            color: var(--green); /* Siyahtan Kırmızımsı Yeşile Çevrildi */
+            color: var(--green); 
             letter-spacing: 12px; 
             text-transform: uppercase; 
             margin: 0; 
@@ -106,7 +106,7 @@
             margin-bottom: 4px;
         }
         
-        /* Türkçe Karakter Destekli Okunaklı El Yazısı */
+        /* Açıklamalar Caveat Fontu (Türkçe Karakter Destekli) */
         .item-desc { 
             font-family: 'Caveat', cursive; 
             font-size: 1.5rem; 
@@ -122,6 +122,7 @@
             font-size: 1.5rem; 
             white-space: nowrap; 
             margin-left: 10px;
+            text-align: right;
         }
 
         #loading { text-align: center; margin-top: 150px; color: var(--green); font-size: 1.5rem; font-weight: bold; }
@@ -146,7 +147,7 @@
             <div class="tagline">Bolu'nun Geleneksel Lezzeti</div>
         </header>
         
-        <div id="loading">Menü Hazırlanıyor...</div>
+        <div id="loading">Menü Yükleniyor...</div>
         <div id="menu-content"></div>
 
         <footer>
@@ -164,11 +165,11 @@
                 Papa.parse(csvData, {
                     header: true,
                     skipEmptyLines: true,
-                    dynamicTyping: false, // Sayıya çevirmeyi tamamen kapat, her şeyi metin olarak al (KESİN ÇÖZÜM)
+                    dynamicTyping: false, // Sayıya çevirme zorlamasını kapattık
                     complete: (results) => { renderMenu(results.data); }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Bağlantı Hatası.';
+                document.getElementById('loading').innerHTML = 'Veri Bağlantı Hatası.';
             }
         }
 
@@ -191,7 +192,8 @@
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
                     
-                    // GÜNCELLEME: Fiyatı hiçbir işleme sokmadan doğrudan ham metin olarak çekiyoruz
+                    // ÖNEMLİ: Fiyat sütununu ham veri olarak alıyoruz
+                    // Başına ₺ veya sonuna bir şey eklemiyoruz, tabloda ne yazdıysan o çıkar.
                     let priceRaw = item['Fiyat (TL)'];
                     if (priceRaw === undefined || priceRaw === null) priceRaw = '';
                     
@@ -202,7 +204,7 @@
                                 <span class="item-name">${name}</span>
                                 <span class="item-desc">${desc}</span>
                             </div>
-                            <div class="item-price">₺${priceRaw}</div>
+                            <div class="item-price">${priceRaw}</div>
                         </div>`;
                 });
                 catHtml += `</div>`;
