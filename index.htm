@@ -7,8 +7,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root { --gold: #c5a059; --bg: #0b0b0b; --card: #161616; --text: #f0f0f0; }
-        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 0; 
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* DEKORATİF GÖRSELLER - Kenarlara sabitleme */
+        .bg-image {
+            position: fixed;
+            z-index: -1; /* İçeriğin arkasında kalması için */
+            opacity: 0.2; /* Gözü yormaması için hafif saydam */
+            pointer-events: none; /* Üzerine tıklanmasın */
+            width: 250px; /* Görsel boyutu */
+            filter: grayscale(30%) sepia(20%); /* Altın temasına uygun tonlama */
+        }
+
+        .img-left {
+            bottom: -20px;
+            left: -50px;
+            transform: rotate(-15deg);
+        }
+
+        .img-right {
+            top: 20%;
+            right: -60px;
+            transform: rotate(15deg);
+        }
+
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            position: relative; 
+            z-index: 1; 
+        }
+
         header { text-align: center; padding: 40px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
         h1 { color: var(--gold); letter-spacing: 6px; text-transform: uppercase; margin: 0; font-size: 2.2rem; }
         .tagline { color: #888; font-style: italic; margin-top: 10px; font-size: 0.9rem; }
@@ -29,40 +69,32 @@
             content: ""; flex: 1; height: 1px; background: #333; margin: 0 15px;
         }
 
-        /* YENİ: Menü elemanı düzeni (resim için) */
         .menu-item { 
             display: flex; 
-            align-items: center; /* Resmi ve yazıları dikeyde ortalar */
-            margin-bottom: 25px; 
-            padding-bottom: 15px;
-            border-bottom: 1px solid #1a1a1a; /* Hafif bir ayırıcı */
+            justify-content: space-between; 
+            margin-bottom: 20px; 
+            padding-bottom: 10px;
         }
 
-        /* YENİ: Resim stili */
-        .item-img-container {
-            width: 70px; /* Resim genişliği */
-            height: 70px; /* Resim yüksekliği */
-            margin-right: 15px; /* Yazı ile ara boşluk */
-            flex-shrink: 0; /* Resmin sıkışmasını engeller */
-        }
-        .item-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Resmi bozmadan kare içine sığdırır */
-            border-radius: 8px; /* Köşeleri yumuşatır */
-            border: 1px solid #333; /* Hafif çerçeve */
-        }
-
-        .item-info { flex: 1; padding-right: 10px; }
+        .item-info { flex: 1; padding-right: 20px; }
         .item-name { font-weight: 600; font-size: 1.05rem; display: block; color: var(--text); }
         .item-desc { font-size: 0.85rem; color: #999; margin-top: 4px; display: block; font-weight: 300; }
         .item-price { color: var(--gold); font-weight: 700; font-size: 1.1rem; white-space: nowrap; }
 
         #loading { text-align: center; margin-top: 100px; color: var(--gold); font-size: 1.2rem; }
         footer { text-align: center; padding: 40px; color: #444; font-size: 0.8rem; }
+
+        /* Mobilde resimlerin içeriği kapatmaması için boyut küçültme */
+        @media (max-width: 768px) {
+            .bg-image { width: 150px; opacity: 0.15; }
+        }
     </style>
 </head>
 <body>
+
+    <img src="manti.png" class="bg-image img-left" alt="">
+    <img src="gozleme.png" class="bg-image img-right" alt="">
+
     <div class="container">
         <header>
             <h1>MANTUNE</h1>
@@ -78,7 +110,6 @@
     </div>
 
     <script>
-        // Senin tablo linkin (CSV formatında çekilecek şekilde ayarlı)
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/1tGMLWyasdCc-FNUF2-iDNHfC0iMjn-ir3FhJizpT0BU/gviz/tq?tqx=out:csv';
 
         async function loadMenu() {
@@ -91,12 +122,11 @@
                     header: true,
                     skipEmptyLines: true,
                     complete: (results) => {
-                        console.log("Veri çekildi:", results.data); // Hata ayıklama için
                         renderMenu(results.data);
                     }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Menü şu an yüklenemiyor. Lütfen daha sonra tekrar deneyin.';
+                document.getElementById('loading').innerHTML = 'Menü şu an yüklenemiyor.';
                 console.error(error);
             }
         }
@@ -105,7 +135,6 @@
             const content = document.getElementById('menu-content');
             document.getElementById('loading').style.display = 'none';
             
-            // Tablodaki başlık isimlerine göre gruplama
             const categories = {};
             data.forEach(item => {
                 const cat = item['Menü Kategorisi']?.trim();
@@ -114,21 +143,10 @@
                 categories[cat].push(item);
             });
 
-            // HTML Oluşturma
             let fullHtml = '';
             for (const [category, items] of Object.entries(categories)) {
                 let catHtml = `<div class="category-section"><h2 class="category-title">${category}</h2>`;
                 
-                // GÜNCELLEME: Kategori ismine göre resim belirleme
-                let categoryImg = '';
-                const lowerCat = category.toLowerCase();
-                if (lowerCat.includes('mantı')) {
-                    categoryImg = 'manti.png'; // GitHub'daki dosya adı
-                } else if (lowerCat.includes('gözleme')) {
-                    categoryImg = 'gozleme.png'; // GitHub'daki dosya adı
-                }
-                // Diğer kategoriler (örneğin Ev Yemekleri) için resim eklemedik.
-
                 items.forEach(item => {
                     const name = item['Ürün Adı'] || '';
                     const desc = item['Açıklama'] || '';
@@ -136,15 +154,8 @@
                     
                     if(!name) return;
 
-                    // Eğer bu kategori için bir resim varsa HTML'e ekle
-                    const imgTag = categoryImg ? `
-                        <div class="item-img-container">
-                            <img src="${categoryImg}" class="item-img" alt="${name}">
-                        </div>` : '';
-
                     catHtml += `
                         <div class="menu-item">
-                            ${imgTag}
                             <div class="item-info">
                                 <span class="item-name">${name}</span>
                                 <span class="item-desc">${desc}</span>
