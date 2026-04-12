@@ -16,108 +16,162 @@
             padding: 0; 
             line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden; /* Sağdaki resim taşarsa kayma olmasın diye */
+            /* Resimler yanlara taşacağı için taşmayı gizliyoruz ama dikey kaymayı bırakıyoruz */
+            overflow-x: hidden; 
             position: relative;
         }
 
-        /* DEKORATİF GÖRSELLER - Muazzam Boyutlar ve Netlik */
-        .bg-image {
-            position: fixed;
-            z-index: -1; /* İçeriğin arkasında ama belirgin */
-            opacity: 0.6; /* Çok daha net ve görünür */
-            pointer-events: none;
-            width: 550px; /* Muazzam boyut! */
+        /* YENİ YAPISI: Ana Taşıyıcı (Resimleri ve Menüyü kapsar) */
+        .main-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            max-width: 1600px; /* Çok geniş ekranlar için sınır */
+            margin: 0 auto;
+            padding: 0 50px; /* Yanlarda resimler için boşluk */
+        }
+
+        /* ÖN PLANDAKİ GÖRSELLER - Yanlara Sabitlenmiş ve Net */
+        .side-image {
+            position: absolute; /* .main-wrapper'a göre konumlanır */
+            z-index: 10; /* Yazıların (z-index: 5) üstünde dursunlar, tam ön plan */
+            opacity: 1; /* TAM NETLİK */
+            pointer-events: none; /* Üzerine tıklanmasın, alttaki menüye tıklanabilsin */
             height: auto;
-            filter: drop-shadow(0 0 30px rgba(0,0,0,0.7)); /* Derinlik katar */
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.8)); /* Derin gölge */
         }
 
         .img-left {
-            bottom: -80px;
-            left: -150px; /* Daha fazla dışarı taşırdık */
-            transform: rotate(-10deg);
+            width: 450px; /* Webde kocaman tabak */
+            left: 0; /* Wrapper'ın sol kenarı */
+            top: 250px; /* Mantı kategorisinin tahmini hizası */
+            transform: rotate(-5deg);
         }
 
         .img-right {
-            top: 15%;
-            right: -180px; /* Daha fazla dışarı taşırdık */
-            transform: rotate(10deg);
+            width: 480px; /* Gözleme biraz daha büyük dursun */
+            right: 0; /* Wrapper'ın sağ kenarı */
+            top: 600px; /* Gözleme kategorisinin tahmini hizası */
+            transform: rotate(5deg);
         }
 
+        /* Menü Bloğu */
         .container { 
+            flex: 0 0 600px; /* Genişliği 600px'de sabitle */
             max-width: 600px; 
-            margin: 0 auto; 
-            padding: 20px; 
+            margin: 40px 0; /* Üst/alt boşluk */
+            padding: 30px; 
             position: relative; 
-            z-index: 1; 
-            /* Yazıların okunması için daha koyu arka plan gölgesi */
-            background: rgba(11, 11, 11, 0.85); 
-            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            z-index: 5; /* Resimlerin altında kalsın */
+            background-color: var(--card); /* Koyu kart arka planı */
             border-radius: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+            border: 1px solid #222; /* Hafif çerçeve */
         }
 
-        header { text-align: center; padding: 40px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
-        h1 { color: var(--gold); letter-spacing: 6px; text-transform: uppercase; margin: 0; font-size: 2.2rem; }
-        .tagline { color: #888; font-style: italic; margin-top: 10px; font-size: 0.9rem; }
+        header { text-align: center; padding: 20px 0 40px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
+        h1 { color: var(--gold); letter-spacing: 6px; text-transform: uppercase; margin: 0; font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .tagline { color: #888; font-style: italic; margin-top: 10px; font-size: 1rem; }
         
-        .category-section { margin-top: 40px; }
+        .category-section { margin-top: 50px; }
         .category-title { 
             color: var(--gold); 
             text-align: center; 
             text-transform: uppercase; 
-            letter-spacing: 2px;
-            font-size: 1.3rem;
-            margin-bottom: 25px;
+            letter-spacing: 3px;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .category-title::before, .category-title::after {
-            content: ""; flex: 1; height: 1px; background: #333; margin: 0 15px;
+            content: ""; flex: 1; height: 1px; background: #444; margin: 0 20px;
         }
 
         .menu-item { 
             display: flex; 
             justify-content: space-between; 
-            margin-bottom: 20px; 
-            padding-bottom: 10px;
+            align-items: flex-start;
+            margin-bottom: 25px; 
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1a1a1a;
         }
 
-        .item-info { flex: 1; padding-right: 20px; }
-        .item-name { font-weight: 600; font-size: 1.05rem; display: block; color: var(--text); }
-        .item-desc { font-size: 0.85rem; color: #999; margin-top: 4px; display: block; font-weight: 300; }
-        .item-price { color: var(--gold); font-weight: 700; font-size: 1.1rem; white-space: nowrap; }
+        .item-info { flex: 1; padding-right: 25px; }
+        .item-name { font-weight: 600; font-size: 1.1rem; display: block; color: var(--text); }
+        .item-desc { font-size: 0.9rem; color: #aaa; margin-top: 5px; display: block; font-weight: 300; }
+        .item-price { color: var(--gold); font-weight: 700; font-size: 1.2rem; white-space: nowrap; margin-top: 2px; }
 
-        #loading { text-align: center; margin-top: 100px; color: var(--gold); font-size: 1.2rem; }
-        footer { text-align: center; padding: 40px; color: #444; font-size: 0.8rem; }
+        #loading { text-align: center; margin-top: 100px; color: var(--gold); font-size: 1.3rem; letter-spacing: 1px; }
+        footer { text-align: center; padding: 50px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; margin-top: 50px; }
 
-        /* Mobilde resim ayarları */
-        @media (max-width: 768px) {
-            .bg-image { width: 350px; opacity: 0.5; }
-            .img-left { left: -100px; bottom: -50px; }
-            .img-right { right: -120px; top: 10%; }
-            .container { margin-top: 10px; margin-bottom: 10px; border-radius: 10px; }
+        /* MOBİL UYUMLULUK - Devrimsel Değişiklik */
+        @media (max-width: 1100px) {
+            .main-wrapper { padding: 0 15px; } /* Yan boşlukları daralt */
+            
+            /* Mobilde resimleri yanlardan alıp, menünün üstüne/altına büyükçe koyuyoruz */
+            .side-image {
+                position: relative; /* Statik düzene sok */
+                display: block;
+                margin: 0 auto;
+                opacity: 1;
+                filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+                transform: none !important; /* Döndürmeyi kaldır */
+            }
+            
+            .img-left {
+                width: 90%; /* Ekranın çoğunu kaplasın */
+                max-width: 400px;
+                left: auto;
+                top: 20px; /* Menünün hemen üstünde */
+                margin-bottom: -30px; /* Menüye biraz yaklaşsın */
+            }
+
+            .img-right {
+                width: 95%; /* Gözleme biraz daha büyük */
+                max-width: 430px;
+                right: auto;
+                top: 0;
+                margin-top: 30px; /* Fiyatlardan sonra */
+                order: 10; /* En alta at (Flexbox order) */
+            }
+            
+            .container { 
+                flex: 1 1 auto; /* Genişliği ekrana yay */
+                width: 100%;
+                margin: 0 auto; 
+                border-radius: 0; /* Köşeleri kes */
+                border: none;
+                box-shadow: none;
+            }
+            
+            /* Flex düzenini dikey yap (Gözlemeyi alta atmak için) */
+            .main-wrapper { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
 <body>
 
-    <img src="manti.png" class="bg-image img-left" alt="Mantı">
-    <img src="gozleme.png" class="bg-image img-right" alt="Gözleme">
-
-    <div class="container">
-        <header>
-            <h1>MANTUNE</h1>
-            <div class="tagline">Mantı • Gözleme • Ev Yemekleri</div>
-        </header>
+    <div class="main-wrapper">
+        <img src="manti.png" class="side-image img-left" alt="Mantı">
         
-        <div id="loading">Menü Yükleniyor...</div>
-        <div id="menu-content"></div>
+        <div class="container">
+            <header>
+                <h1>MANTUNE</h1>
+                <div class="tagline">Mantı • Gözleme • Ev Yemekleri</div>
+            </header>
+            
+            <div id="loading">Menü Yükleniyor...</div>
+            <div id="menu-content"></div>
 
-        <footer>
-            &copy; 2026 Mantune Bolu. Tüm hakları saklıdır.
-        </footer>
+            <footer>
+                &copy; 2026 Mantune Bolu. Tüm hakları saklıdır.
+            </footer>
+        </div>
+        
+        <img src="gozleme.png" class="side-image img-right" alt="Gözleme">
     </div>
 
     <script>
