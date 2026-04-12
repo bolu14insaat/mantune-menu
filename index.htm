@@ -12,9 +12,8 @@
         :root {
             --green: #2d5a27;
             --black: #000000;
-            --box-bg: rgba(245, 240, 230, 0.56);
-            --soft-white: rgba(255,255,255,0.72);
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --box-bg: rgba(245, 240, 230, 0.5);
+            --shadow: 0 10px 24px rgba(0,0,0,0.08);
         }
 
         * {
@@ -45,7 +44,6 @@
             pointer-events: none;
             width: 450px;
             height: auto;
-            filter: drop-shadow(0 8px 14px rgba(0,0,0,0.12));
         }
 
         .img-left {
@@ -79,13 +77,11 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255,255,255,0.72);
-            border: 1px solid rgba(45,90,39,0.16);
+            background: rgba(255,255,255,0.78);
+            border: 1px solid rgba(45,90,39,0.14);
             border-radius: 999px;
             padding: 6px;
             box-shadow: var(--shadow);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
         }
 
         .lang-btn {
@@ -136,7 +132,6 @@
             font-size: 4rem;
             font-weight: 900;
             line-height: 1.1;
-            text-shadow: 0 3px 10px rgba(255,255,255,0.3);
         }
 
         .tagline {
@@ -186,11 +181,9 @@
             margin-bottom: 18px;
             background: var(--box-bg);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 4px;
             border-left: 5px solid var(--green);
             box-shadow: var(--shadow);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             animation: fadeUp 0.42s ease;
         }
