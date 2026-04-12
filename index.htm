@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mantune - Dijital Menü</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
@@ -14,10 +14,10 @@
             --green-dark: #1f431b;
             --black: #111111;
             --box-bg: rgba(245, 240, 230, 0.52);
-            --white-soft: rgba(255,255,255,0.84);
             --border-soft: rgba(45,90,39,0.16);
             --shadow: 0 10px 24px rgba(0,0,0,0.08);
             --shadow-strong: 0 16px 34px rgba(0,0,0,0.10);
+            --sticky-offset: 12px;
         }
 
         * {
@@ -73,22 +73,11 @@
 
         .top-bar {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             gap: 12px;
             padding-top: 14px;
             margin-bottom: 6px;
-        }
-
-        .menu-note {
-            font-size: 0.78rem;
-            color: rgba(17,17,17,0.62);
-            background: rgba(255,255,255,0.72);
-            border: 1px solid rgba(45,90,39,0.10);
-            padding: 8px 12px;
-            border-radius: 999px;
-            box-shadow: var(--shadow);
-            letter-spacing: 0.2px;
         }
 
         .lang-switch {
@@ -180,7 +169,7 @@
 
         header {
             text-align: center;
-            padding: 24px 0 28px;
+            padding: 24px 0 22px;
             animation: fadeDown 0.7s ease;
         }
 
@@ -267,12 +256,26 @@
             margin-top: -2px;
         }
 
+        .tabs-wrap {
+            position: sticky;
+            top: var(--sticky-offset);
+            z-index: 50;
+            margin: 6px 0 10px;
+        }
+
+        .tabs-shell {
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(45,90,39,0.12);
+            border-radius: 18px;
+            padding: 8px;
+            box-shadow: var(--shadow);
+        }
+
         .quick-nav {
             display: flex;
             gap: 10px;
             overflow-x: auto;
-            padding: 4px 2px 12px;
-            margin-bottom: 14px;
+            padding: 2px;
             scrollbar-width: none;
         }
 
@@ -285,23 +288,30 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 10px 14px;
+            padding: 10px 16px;
             border-radius: 999px;
-            border: 1px solid rgba(45,90,39,0.14);
-            background: rgba(255,255,255,0.80);
+            border: 1px solid rgba(45,90,39,0.10);
+            background: rgba(255,255,255,0.78);
             color: var(--green-dark);
             text-decoration: none;
-            font-size: 0.88rem;
+            font-size: 0.90rem;
             font-weight: 600;
             white-space: nowrap;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
         }
 
         .quick-chip:hover {
             transform: translateY(-1px);
             box-shadow: var(--shadow-strong);
-            background: rgba(255,255,255,0.92);
+            background: rgba(255,255,255,0.96);
+        }
+
+        .quick-chip.active {
+            background: var(--green);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 8px 18px rgba(45,90,39,0.22);
         }
 
         #loading {
@@ -319,7 +329,7 @@
 
         .category-section {
             margin-top: 42px;
-            scroll-margin-top: 24px;
+            scroll-margin-top: 92px;
         }
 
         .category-title {
@@ -332,26 +342,7 @@
             border-bottom: 1.5px solid rgba(45,90,39,0.30);
             padding-bottom: 10px;
             animation: fadeUp 0.45s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
             letter-spacing: 0.10rem;
-        }
-
-        .category-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.68);
-            border: 1px solid rgba(45,90,39,0.14);
-            box-shadow: var(--shadow);
-            font-size: 0.95rem;
-            line-height: 1;
-            flex-shrink: 0;
         }
 
         .menu-list {
@@ -491,21 +482,12 @@
             }
 
             .top-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-
-            .menu-note {
-                text-align: center;
-            }
-
-            .lang-switch {
-                align-self: center;
+                justify-content: center;
+                padding-top: 10px;
             }
 
             header {
-                padding: 18px 0 24px;
+                padding: 18px 0 18px;
             }
 
             .logo-wrap {
@@ -538,9 +520,14 @@
                 width: 90px;
             }
 
-            .quick-nav {
-                padding-bottom: 8px;
-                margin-bottom: 8px;
+            .tabs-wrap {
+                top: 8px;
+                margin-bottom: 6px;
+            }
+
+            .tabs-shell {
+                border-radius: 14px;
+                padding: 6px;
             }
 
             .quick-chip {
@@ -548,17 +535,14 @@
                 font-size: 0.82rem;
             }
 
+            .category-section {
+                scroll-margin-top: 82px;
+            }
+
             .category-title {
                 font-size: 1.65rem;
                 letter-spacing: 0.06rem;
                 margin-bottom: 18px;
-                gap: 8px;
-            }
-
-            .category-icon {
-                width: 26px;
-                height: 26px;
-                font-size: 0.85rem;
             }
 
             .menu-item {
@@ -590,13 +574,11 @@
 </head>
 <body>
 
-    <img src="manti.png" class="bg-image img-left" alt="Mantı">
-    <img src="manti.png" class="bg-image img-right" alt="Mantı">
+    <img src="manti.png" class="bg-image img-left" alt="Mantı" />
+    <img src="manti.png" class="bg-image img-right" alt="Mantı" />
 
     <div class="container">
         <div class="top-bar">
-            <div class="menu-note" id="menu-note">QR Menü • Hızlı Erişim</div>
-
             <div class="lang-switch" aria-label="Dil seçici">
                 <button id="btn-tr" class="lang-btn active" type="button" onclick="setLang('tr')">
                     <span class="flag-box flag-tr"></span>
@@ -620,7 +602,11 @@
             </div>
         </header>
 
-        <div id="quick-nav" class="quick-nav"></div>
+        <div class="tabs-wrap">
+            <div class="tabs-shell">
+                <div id="quick-nav" class="quick-nav"></div>
+            </div>
+        </div>
 
         <div id="loading">Menü Yükleniyor...</div>
         <div id="menu-content"></div>
@@ -635,6 +621,7 @@
 
         let currentLang = localStorage.getItem('mantune_lang') || 'tr';
         let menuData = [];
+        let observer;
 
         function escapeHtml(text) {
             return String(text ?? '')
@@ -707,34 +694,15 @@
             return parts.map(part => `<span class="price-line">${escapeHtml(part)}</span>`).join('');
         }
 
-        function getCategoryIcon(categoryText) {
-            const text = (categoryText || '').toLowerCase();
-
-            if (text.includes('gözleme') || text.includes('gozleme')) return '🥟';
-            if (text.includes('mantı') || text.includes('dumpling')) return '🥣';
-            if (text.includes('ızgara') || text.includes('grill')) return '🔥';
-            if (text.includes('kahvalt') || text.includes('breakfast')) return '☀️';
-            if (text.includes('içecek') || text.includes('drink') || text.includes('coffee')) return '☕';
-            if (text.includes('tatlı') || text.includes('dessert')) return '🍮';
-            if (text.includes('ev yemek') || text.includes('home')) return '🍲';
-            if (text.includes('fast food')) return '🍔';
-            if (text.includes('sarma') || text.includes('wrap')) return '🌿';
-            if (text.includes('çiğ köfte') || text.includes('raw')) return '🌶️';
-            if (text.includes('çocuk') || text.includes('kids')) return '🧒';
-            return '•';
-        }
-
         function updateStaticTexts() {
             const title = document.getElementById('main-title');
             const tagline = document.getElementById('main-tagline');
             const loading = document.getElementById('loading');
-            const menuNote = document.getElementById('menu-note');
 
             if (currentLang === 'en') {
                 document.documentElement.lang = 'en';
                 title.textContent = 'MANTUNE';
                 tagline.textContent = 'Traditional Taste of Bolu';
-                menuNote.textContent = 'QR Menu • Quick Access';
                 if (loading.style.display !== 'none') {
                     loading.textContent = 'Loading menu...';
                 }
@@ -742,7 +710,6 @@
                 document.documentElement.lang = 'tr';
                 title.textContent = 'MANTUNE';
                 tagline.textContent = "Bolu'nun Geleneksel Lezzeti";
-                menuNote.textContent = 'QR Menü • Hızlı Erişim';
                 if (loading.style.display !== 'none') {
                     loading.textContent = 'Menü Yükleniyor...';
                 }
@@ -799,10 +766,50 @@
                 return;
             }
 
-            nav.innerHTML = categoryOrder.map(category => {
+            nav.innerHTML = categoryOrder.map((category, index) => {
                 const id = 'cat-' + slugify(category);
-                return `<a class="quick-chip" href="#${id}">${escapeHtml(category)}</a>`;
+                const activeClass = index === 0 ? 'active' : '';
+                return `<a class="quick-chip ${activeClass}" data-target="${escapeHtml(id)}" href="#${id}">${escapeHtml(category)}</a>`;
             }).join('');
+
+            nav.querySelectorAll('.quick-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    setActiveTab(chip.dataset.target);
+                });
+            });
+        }
+
+        function setActiveTab(targetId) {
+            document.querySelectorAll('.quick-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.target === targetId);
+            });
+        }
+
+        function setupSectionObserver() {
+            if (observer) observer.disconnect();
+
+            const sections = document.querySelectorAll('.category-section');
+            if (!sections.length) return;
+
+            observer = new IntersectionObserver((entries) => {
+                let visibleSection = null;
+
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        visibleSection = entry.target.id;
+                    }
+                });
+
+                if (visibleSection) {
+                    setActiveTab(visibleSection);
+                }
+            }, {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0.01
+            });
+
+            sections.forEach(section => observer.observe(section));
         }
 
         function renderMenu(data, animate = true) {
@@ -835,14 +842,10 @@
             categoryOrder.forEach(category => {
                 const items = categories[category];
                 const categoryId = 'cat-' + slugify(category);
-                const icon = getCategoryIcon(category);
 
                 let catHtml = `
                     <section class="category-section" id="${escapeHtml(categoryId)}">
-                        <h2 class="category-title">
-                            <span class="category-icon">${icon}</span>
-                            <span>${escapeHtml(category)}</span>
-                        </h2>
+                        <h2 class="category-title">${escapeHtml(category)}</h2>
                         <div class="menu-list">
                 `;
 
@@ -884,6 +887,8 @@
                 void content.offsetWidth;
                 content.classList.add('menu-fade');
             }
+
+            setupSectionObserver();
         }
 
         updateStaticTexts();
