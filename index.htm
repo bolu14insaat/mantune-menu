@@ -16,28 +16,29 @@
             padding: 0; 
             line-height: 1.6;
             min-height: 100vh;
-            position: relative;
+            overflow-x: hidden; /* Resimler taşarsa sağa kayma olmasın diye */
         }
 
-        /* DEKORATİF GÖRSELLER - Kenarlara sabitleme */
+        /* DEKORATİF GÖRSELLER - Büyütülmüş ve Ayarlanmış */
         .bg-image {
             position: fixed;
-            z-index: -1; /* İçeriğin arkasında kalması için */
-            opacity: 0.2; /* Gözü yormaması için hafif saydam */
-            pointer-events: none; /* Üzerine tıklanmasın */
-            width: 250px; /* Görsel boyutu */
-            filter: grayscale(30%) sepia(20%); /* Altın temasına uygun tonlama */
+            z-index: -1;
+            opacity: 0.25; /* Şeffaflığı buradan ayarlayabilirsin */
+            pointer-events: none;
+            width: 350px; /* Görselleri buradan büyütebilirsin */
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5)); /* Derinlik katar */
         }
 
         .img-left {
-            bottom: -20px;
-            left: -50px;
+            bottom: -50px;
+            left: -100px; /* Biraz dışarı taşırdık ki daha doğal dursun */
             transform: rotate(-15deg);
         }
 
         .img-right {
-            top: 20%;
-            right: -60px;
+            top: 10%;
+            right: -120px;
             transform: rotate(15deg);
         }
 
@@ -47,6 +48,8 @@
             padding: 20px; 
             position: relative; 
             z-index: 1; 
+            background: rgba(11, 11, 11, 0.7); /* Arkadaki resimlerin üstüne gelince yazı okunsun diye hafif karartma */
+            border-radius: 15px;
         }
 
         header { text-align: center; padding: 40px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
@@ -84,16 +87,18 @@
         #loading { text-align: center; margin-top: 100px; color: var(--gold); font-size: 1.2rem; }
         footer { text-align: center; padding: 40px; color: #444; font-size: 0.8rem; }
 
-        /* Mobilde resimlerin içeriği kapatmaması için boyut küçültme */
+        /* Mobilde resim ayarları */
         @media (max-width: 768px) {
-            .bg-image { width: 150px; opacity: 0.15; }
+            .bg-image { width: 220px; opacity: 0.2; }
+            .img-left { left: -60px; bottom: 0; }
+            .img-right { right: -80px; top: 5%; }
         }
     </style>
 </head>
 <body>
 
-    <img src="manti.png" class="bg-image img-left" alt="">
-    <img src="gozleme.png" class="bg-image img-right" alt="">
+    <img src="manti.png" class="bg-image img-left" alt="Mantı">
+    <img src="gozleme.png" class="bg-image img-right" alt="Gözleme">
 
     <div class="container">
         <header>
