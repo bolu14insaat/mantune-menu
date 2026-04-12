@@ -1,99 +1,548 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mantune Menü</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantune - Dijital Menü</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
-<style>
-body { font-family: Arial; background:#f5f5f5; margin:0; }
-.container { max-width:700px; margin:auto; padding:20px; }
-.topbar { text-align:right; margin-bottom:20px; }
-button { padding:6px 12px; cursor:pointer; }
-.category { margin-top:30px; }
-.item { display:flex; justify-content:space-between; margin:10px 0; }
-</style>
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 
-<body>
-<div class="container">
-
-<div class="topbar">
-<button onclick="setLang('tr')">TR</button>
-<button onclick="setLang('en')">EN</button>
-</div>
-
-<div id="menu"></div>
-
-</div>
-
-<script>
-let lang = 'tr';
-
-const sheetUrl = 'SHEET_LINK_BURAYA';
-
-function setLang(l){
-    lang = l;
-    loadMenu();
-}
-
-function getField(item, tr, en){
-    if(lang === 'en'){
-        return item[en] || item[tr] || '';
-    }
-    return item[tr] || '';
-}
-
-async function loadMenu(){
-    const res = await fetch(sheetUrl);
-    const csv = await res.text();
-
-    Papa.parse(csv, {
-        header:true,
-        complete:(results)=>{
-            render(results.data);
+    <style>
+        :root {
+            --green: #2d5a27;
+            --black: #000000;
+            --box-bg: rgba(245, 240, 230, 0.56);
+            --soft-white: rgba(255,255,255,0.72);
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
-    });
-}
 
-function render(data){
-    const menu = document.getElementById('menu');
-    let html = '';
+        * {
+            box-sizing: border-box;
+        }
 
-    const categories = {};
+        html {
+            scroll-behavior: smooth;
+        }
 
-    data.forEach(i=>{
-        const cat = getField(i,'Menü Kategorisi','Menü Kategorisi EN');
-        if(!categories[cat]) categories[cat]=[];
-        categories[cat].push(i);
-    });
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-image: url('arkaplan.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: #f1ebd8;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
 
-    for(const cat in categories){
-        html += `<div class="category"><h2>${cat}</h2>`;
+        .bg-image {
+            position: fixed;
+            z-index: 1;
+            opacity: 1;
+            pointer-events: none;
+            width: 450px;
+            height: auto;
+            filter: drop-shadow(0 8px 14px rgba(0,0,0,0.12));
+        }
 
-        categories[cat].forEach(i=>{
-            const name = getField(i,'Ürün Adı','Ürün Adı EN');
-            const desc = getField(i,'Açıklama','Açıklama EN');
-            const price = getField(i,'Fiyat Yazısı','Fiyat Yazısı EN');
+        .img-left {
+            bottom: -50px;
+            left: -80px;
+            transform: rotate(-5deg);
+        }
 
-            html += `
-            <div class="item">
-                <div>
-                    <b>${name}</b><br>
-                    <small>${desc}</small>
+        .img-right {
+            top: 8%;
+            right: -100px;
+            transform: rotate(5deg);
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px 20px 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-top: 18px;
+        }
+
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(45,90,39,0.16);
+            border-radius: 999px;
+            padding: 6px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .lang-btn {
+            appearance: none;
+            border: none;
+            background: transparent;
+            color: var(--green);
+            padding: 9px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.22s ease, background-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .lang-btn.active {
+            background: var(--green);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(45,90,39,0.22);
+        }
+
+        .flag {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 38px 0 56px;
+            animation: fadeDown 0.7s ease;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--green);
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            margin: 0;
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            text-shadow: 0 3px 10px rgba(255,255,255,0.3);
+        }
+
+        .tagline {
+            color: var(--green);
+            margin-top: 15px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        #loading {
+            text-align: center;
+            margin-top: 120px;
+            color: var(--green);
+            font-size: 1.25rem;
+            font-weight: 700;
+            animation: pulse 1.3s infinite ease-in-out;
+        }
+
+        .menu-fade {
+            animation: contentFade 0.32s ease;
+        }
+
+        .category-section {
+            margin-top: 54px;
+        }
+
+        .category-title {
+            color: var(--green);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 1.75rem;
+            margin-bottom: 34px;
+            font-weight: 700;
+            border-bottom: 2px solid var(--green);
+            padding-bottom: 10px;
+            animation: fadeUp 0.45s ease;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 18px;
+            background: var(--box-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--green);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: fadeUp 0.42s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.10);
+        }
+
+        .item-info {
+            flex: 1;
+            padding-right: 16px;
+            min-width: 0;
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 1.24rem;
+            display: block;
+            color: var(--black);
+            margin-bottom: 5px;
+        }
+
+        .item-desc {
+            font-family: 'Caveat', cursive;
+            font-size: 1.45rem;
+            color: #222;
+            display: block;
+            font-weight: 400;
+            line-height: 1.2;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .item-price {
+            color: var(--black);
+            font-weight: 900;
+            font-size: 1.18rem;
+            white-space: pre-line;
+            text-align: right;
+            line-height: 1.35;
+            min-width: 112px;
+            max-width: 160px;
+            flex-shrink: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 58px 20px 24px;
+            color: rgba(0,0,0,0.55);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes contentFade {
+            from { opacity: 0.15; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.65; }
+            50% { opacity: 1; }
+            100% { opacity: 0.65; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px 14px 34px;
+            }
+
+            .bg-image {
+                width: 280px;
+            }
+
+            .img-left {
+                bottom: -10px;
+                left: -90px;
+            }
+
+            .img-right {
+                top: 6%;
+                right: -90px;
+            }
+
+            .top-actions {
+                justify-content: center;
+                padding-top: 12px;
+            }
+
+            h1 {
+                font-size: 2.7rem;
+                letter-spacing: 6px;
+            }
+
+            .tagline {
+                font-size: 0.9rem;
+                letter-spacing: 3px;
+            }
+
+            .category-title {
+                font-size: 1.45rem;
+                letter-spacing: 3px;
+            }
+
+            .menu-item {
+                padding: 15px;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .item-name {
+                font-size: 1.08rem;
+            }
+
+            .item-desc {
+                font-size: 1.28rem;
+            }
+
+            .item-price {
+                min-width: 84px;
+                max-width: 110px;
+                font-size: 1rem;
+            }
+
+            body {
+                background-attachment: scroll;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="manti.png" class="bg-image img-left" alt="Mantı">
+    <img src="manti.png" class="bg-image img-right" alt="Mantı">
+
+    <div class="container">
+        <div class="top-actions">
+            <div class="lang-switch" aria-label="Dil seçici">
+                <button id="btn-tr" class="lang-btn active" type="button" onclick="setLang('tr')">
+                    <span class="flag">🇹🇷</span>
+                    <span>TR</span>
+                </button>
+                <button id="btn-en" class="lang-btn" type="button" onclick="setLang('en')">
+                    <span class="flag">🇬🇧</span>
+                    <span>EN</span>
+                </button>
+            </div>
+        </div>
+
+        <header>
+            <h1 id="main-title">MANTUNE</h1>
+            <div class="tagline" id="main-tagline">Bolu'nun Geleneksel Lezzeti</div>
+        </header>
+
+        <div id="loading">Menü Yükleniyor...</div>
+        <div id="menu-content"></div>
+
+        <footer>
+            &copy; 2026 Mantune Bolu.
+        </footer>
+    </div>
+
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1tGMLWyasdCc-FNUF2-iDNHfC0iMjn-ir3FhJizpT0BU/gviz/tq?tqx=out:csv';
+
+        let currentLang = localStorage.getItem('mantune_lang') || 'tr';
+        let menuData = [];
+
+        function escapeHtml(text) {
+            return String(text ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function cleanValue(value) {
+            if (value === undefined || value === null) return '';
+            return String(value).trim();
+        }
+
+        function getLocalizedValue(item, trKey, enKey) {
+            const trValue = cleanValue(item[trKey]);
+            const enValue = cleanValue(item[enKey]);
+
+            if (currentLang === 'en') {
+                return enValue || trValue || '';
+            }
+            return trValue || enValue || '';
+        }
+
+        function getLocalizedCategory(item) {
+            return getLocalizedValue(item, 'Menü Kategorisi', 'Menu Category EN');
+        }
+
+        function getLocalizedName(item) {
+            return getLocalizedValue(item, 'Ürün Adı', 'Product Name EN');
+        }
+
+        function getLocalizedDescription(item) {
+            return getLocalizedValue(item, 'Açıklama', 'Description EN');
+        }
+
+        function getLocalizedPrice(item) {
+            return getLocalizedValue(item, 'Fiyat (TL)', 'Price (TL)');
+        }
+
+        function updateStaticTexts() {
+            const title = document.getElementById('main-title');
+            const tagline = document.getElementById('main-tagline');
+            const loading = document.getElementById('loading');
+
+            if (currentLang === 'en') {
+                document.documentElement.lang = 'en';
+                title.textContent = 'MANTUNE';
+                tagline.textContent = 'Traditional Taste of Bolu';
+                if (loading.style.display !== 'none') {
+                    loading.textContent = 'Loading menu...';
+                }
+            } else {
+                document.documentElement.lang = 'tr';
+                title.textContent = 'MANTUNE';
+                tagline.textContent = "Bolu'nun Geleneksel Lezzeti";
+                if (loading.style.display !== 'none') {
+                    loading.textContent = 'Menü Yükleniyor...';
+                }
+            }
+
+            document.getElementById('btn-tr').classList.toggle('active', currentLang === 'tr');
+            document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('mantune_lang', lang);
+            updateStaticTexts();
+            renderMenu(menuData, true);
+        }
+
+        async function loadMenu() {
+            try {
+                updateStaticTexts();
+
+                const response = await fetch(sheetUrl);
+                const csvData = await response.text();
+
+                Papa.parse(csvData, {
+                    header: true,
+                    skipEmptyLines: true,
+                    dynamicTyping: false,
+                    complete: (results) => {
+                        menuData = results.data || [];
+                        renderMenu(menuData, false);
+                    },
+                    error: () => {
+                        const loading = document.getElementById('loading');
+                        loading.style.display = 'block';
+                        loading.textContent = currentLang === 'en'
+                            ? 'Data parsing error.'
+                            : 'Veri ayrıştırma hatası.';
+                    }
+                });
+            } catch (error) {
+                const loading = document.getElementById('loading');
+                loading.style.display = 'block';
+                loading.textContent = currentLang === 'en'
+                    ? 'Data connection error.'
+                    : 'Veri bağlantı hatası.';
+            }
+        }
+
+        function renderMenu(data, animate = true) {
+            const content = document.getElementById('menu-content');
+            const loading = document.getElementById('loading');
+
+            loading.style.display = 'none';
+
+            const categories = {};
+            const categoryOrder = [];
+
+            data.forEach(item => {
+                const localizedCategory = getLocalizedCategory(item);
+                const localizedName = getLocalizedName(item);
+
+                if (!localizedCategory || !localizedName) return;
+
+                if (!categories[localizedCategory]) {
+                    categories[localizedCategory] = [];
+                    categoryOrder.push(localizedCategory);
+                }
+
+                categories[localizedCategory].push(item);
+            });
+
+            let fullHtml = '';
+
+            categoryOrder.forEach(category => {
+                const items = categories[category];
+
+                let catHtml = `
+                    <div class="category-section">
+                        <h2 class="category-title">${escapeHtml(category)}</h2>
+                `;
+
+                items.forEach(item => {
+                    const name = getLocalizedName(item);
+                    const desc = getLocalizedDescription(item);
+                    const price = getLocalizedPrice(item);
+
+                    if (!name) return;
+
+                    catHtml += `
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <span class="item-name">${escapeHtml(name)}</span>
+                                ${desc ? `<span class="item-desc">${escapeHtml(desc)}</span>` : ''}
+                            </div>
+                            <div class="item-price">${escapeHtml(price)}</div>
+                        </div>
+                    `;
+                });
+
+                catHtml += `</div>`;
+                fullHtml += catHtml;
+            });
+
+            content.innerHTML = fullHtml || `
+                <div id="loading" style="display:block; margin-top: 80px;">
+                    ${currentLang === 'en' ? 'No menu data found.' : 'Menü verisi bulunamadı.'}
                 </div>
-                <div>${price}</div>
-            </div>`;
-        });
+            `;
 
-        html += `</div>`;
-    }
+            if (animate) {
+                content.classList.remove('menu-fade');
+                void content.offsetWidth;
+                content.classList.add('menu-fade');
+            }
+        }
 
-    menu.innerHTML = html;
-}
-
-loadMenu();
-</script>
+        updateStaticTexts();
+        loadMenu();
+    </script>
 </body>
 </html>
