@@ -5,78 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantune - Dijital Menü</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        :root { 
-            --green: #2d5a27;    /* İstediğin Net Yeşil Tonu */
-            --black: #000000;    
-            --box-bg: rgba(245, 240, 230, 0.5); /* Şeffaf ton */
+        :root {
+            --green: #2d5a27;
+            --black: #000000;
+            --box-bg: rgba(245, 240, 230, 0.5);
         }
-        
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background-image: url('arkaplan.png'); 
-            background-size: cover; 
-            background-position: center; 
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-image: url('arkaplan.png');
+            background-size: cover;
+            background-position: center;
             background-attachment: fixed;
             background-repeat: no-repeat;
-            background-color: #f1ebd8; 
-            margin: 0; 
-            padding: 0; 
+            background-color: #f1ebd8;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
         }
 
         .bg-image {
             position: fixed;
-            z-index: 1; 
-            opacity: 1; 
+            z-index: 1;
+            opacity: 1;
             pointer-events: none;
-            width: 450px; 
+            width: 450px;
             height: auto;
         }
 
-        .img-left { bottom: -50px; left: -80px; transform: rotate(-5deg); }
-        .img-right { top: 8%; right: -100px; transform: rotate(5deg); }
-
-        .container { 
-            max-width: 650px; 
-            margin: 0 auto; 
-            padding: 20px; 
-            position: relative; 
-            z-index: 10; 
+        .img-left {
+            bottom: -50px;
+            left: -80px;
+            transform: rotate(-5deg);
         }
 
-        header { text-align: center; padding: 70px 0; }
-        
-        /* Ana Başlık Artık Yeşil */
-        h1 { 
+        .img-right {
+            top: 8%;
+            right: -100px;
+            transform: rotate(5deg);
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            text-align: center;
+            padding: 70px 0;
+        }
+
+        h1 {
             font-family: 'Playfair Display', serif;
-            color: var(--green); 
-            letter-spacing: 12px; 
-            text-transform: uppercase; 
-            margin: 0; 
-            font-size: 4rem; 
+            color: var(--green);
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            margin: 0;
+            font-size: 4rem;
             font-weight: 900;
             line-height: 1.1;
         }
 
-        .tagline { 
-            color: var(--green); 
-            margin-top: 15px; 
-            font-size: 1.1rem; 
-            font-weight: 700; 
+        .tagline {
+            color: var(--green);
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
             letter-spacing: 5px;
             text-transform: uppercase;
         }
-        
-        .category-section { margin-top: 60px; }
-        
-        .category-title { 
-            color: var(--green); 
-            text-align: center; 
-            text-transform: uppercase; 
+
+        .category-section {
+            margin-top: 60px;
+        }
+
+        .category-title {
+            color: var(--green);
+            text-align: center;
+            text-transform: uppercase;
             letter-spacing: 4px;
             font-size: 1.8rem;
             margin-bottom: 35px;
@@ -85,54 +102,100 @@
             padding-bottom: 10px;
         }
 
-        .menu-item { 
-            display: flex; 
-            justify-content: space-between; 
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px; 
-            background: var(--box-bg); 
+            gap: 16px;
+            margin-bottom: 18px;
+            background: var(--box-bg);
             padding: 20px;
             border-radius: 4px;
             border-left: 5px solid var(--green);
         }
 
-        .item-info { flex: 1; padding-right: 20px; }
-        
-        .item-name { 
-            font-weight: 700; 
-            font-size: 1.3rem; 
-            display: block; 
-            color: var(--black); 
+        .item-info {
+            flex: 1;
+            padding-right: 20px;
+            min-width: 0;
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: block;
+            color: var(--black);
             margin-bottom: 4px;
         }
-        
-        /* Açıklamalar Caveat Fontu (Türkçe Karakter Destekli) */
-        .item-desc { 
-            font-family: 'Caveat', cursive; 
-            font-size: 1.5rem; 
-            color: #222; 
-            display: block; 
+
+        .item-desc {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: #222;
+            display: block;
             font-weight: 400;
             line-height: 1.2;
         }
-        
-        .item-price { 
-            color: var(--black); 
-            font-weight: 900; 
-            font-size: 1.5rem; 
-            white-space: nowrap; 
+
+        .item-price {
+            color: var(--black);
+            font-weight: 900;
+            font-size: 1.2rem;
+            white-space: normal;
             margin-left: 10px;
             text-align: right;
+            line-height: 1.4;
+            min-width: 110px;
+            flex-shrink: 0;
         }
 
-        #loading { text-align: center; margin-top: 150px; color: var(--green); font-size: 1.5rem; font-weight: bold; }
-        footer { text-align: center; padding: 60px; color: rgba(0,0,0,0.5); font-size: 0.9rem; font-weight: 700; }
+        .price-line {
+            display: block;
+        }
+
+        #loading {
+            text-align: center;
+            margin-top: 150px;
+            color: var(--green);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px;
+            color: rgba(0,0,0,0.5);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
 
         @media (max-width: 768px) {
-            .bg-image { width: 300px; }
-            h1 { font-size: 2.8rem; letter-spacing: 6px; }
-            .menu-item { padding: 15px; }
-            body { background-attachment: scroll; }
+            .bg-image {
+                width: 300px;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+                letter-spacing: 6px;
+            }
+
+            .menu-item {
+                padding: 15px;
+                align-items: flex-start;
+            }
+
+            body {
+                background-attachment: scroll;
+            }
+
+            .item-price {
+                min-width: 90px;
+                font-size: 1.05rem;
+            }
+
+            .item-desc {
+                font-size: 1.35rem;
+            }
         }
     </style>
 </head>
@@ -146,7 +209,7 @@
             <h1>MANTUNE</h1>
             <div class="tagline">Bolu'nun Geleneksel Lezzeti</div>
         </header>
-        
+
         <div id="loading">Menü Yükleniyor...</div>
         <div id="menu-content"></div>
 
@@ -158,60 +221,102 @@
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/1tGMLWyasdCc-FNUF2-iDNHfC0iMjn-ir3FhJizpT0BU/gviz/tq?tqx=out:csv';
 
+        function escapeHtml(text) {
+            return String(text ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function formatPrice(priceValue) {
+            if (priceValue === undefined || priceValue === null) return '';
+
+            const cleaned = String(priceValue).trim();
+            if (!cleaned) return '';
+
+            return cleaned
+                .split('|')
+                .map(part => part.trim())
+                .filter(Boolean)
+                .map(part => `<span class="price-line">${escapeHtml(part)}</span>`)
+                .join('');
+        }
+
         async function loadMenu() {
             try {
                 const response = await fetch(sheetUrl);
                 const csvData = await response.text();
+
                 Papa.parse(csvData, {
                     header: true,
                     skipEmptyLines: true,
-                    dynamicTyping: false, // Sayıya çevirme zorlamasını kapattık
-                    complete: (results) => { renderMenu(results.data); }
+                    dynamicTyping: false,
+                    complete: (results) => {
+                        renderMenu(results.data);
+                    },
+                    error: () => {
+                        document.getElementById('loading').innerHTML = 'Veri ayrıştırma hatası.';
+                    }
                 });
             } catch (error) {
-                document.getElementById('loading').innerHTML = 'Veri Bağlantı Hatası.';
+                document.getElementById('loading').innerHTML = 'Veri bağlantı hatası.';
             }
         }
 
         function renderMenu(data) {
             const content = document.getElementById('menu-content');
-            document.getElementById('loading').style.display = 'none';
+            const loading = document.getElementById('loading');
+
+            loading.style.display = 'none';
+
             const categories = {};
-            
+
             data.forEach(item => {
-                const cat = item['Menü Kategorisi']?.trim();
+                const cat = item['Menü Kategorisi'] ? item['Menü Kategorisi'].trim() : '';
                 if (!cat) return;
-                if (!categories[cat]) categories[cat] = [];
+
+                if (!categories[cat]) {
+                    categories[cat] = [];
+                }
+
                 categories[cat].push(item);
             });
 
             let fullHtml = '';
+
             for (const [category, items] of Object.entries(categories)) {
-                let catHtml = `<div class="category-section"><h2 class="category-title">${category}</h2>`;
+                let catHtml = `
+                    <div class="category-section">
+                        <h2 class="category-title">${escapeHtml(category)}</h2>
+                `;
+
                 items.forEach(item => {
-                    const name = item['Ürün Adı'] || '';
-                    const desc = item['Açıklama'] || '';
-                    
-                    // ÖNEMLİ: Fiyat sütununu ham veri olarak alıyoruz
-                    // Başına ₺ veya sonuna bir şey eklemiyoruz, tabloda ne yazdıysan o çıkar.
-                    let priceRaw = item['Fiyat (TL)'];
-                    if (priceRaw === undefined || priceRaw === null) priceRaw = '';
-                    
-                    if(!name) return;
+                    const name = item['Ürün Adı'] ? item['Ürün Adı'].trim() : '';
+                    const desc = item['Açıklama'] ? item['Açıklama'].trim() : '';
+                    const formattedPrice = formatPrice(item['Fiyat (TL)']);
+
+                    if (!name) return;
+
                     catHtml += `
                         <div class="menu-item">
                             <div class="item-info">
-                                <span class="item-name">${name}</span>
-                                <span class="item-desc">${desc}</span>
+                                <span class="item-name">${escapeHtml(name)}</span>
+                                <span class="item-desc">${escapeHtml(desc)}</span>
                             </div>
-                            <div class="item-price">${priceRaw}</div>
-                        </div>`;
+                            <div class="item-price">${formattedPrice}</div>
+                        </div>
+                    `;
                 });
+
                 catHtml += `</div>`;
                 fullHtml += catHtml;
             }
-            content.innerHTML = fullHtml;
+
+            content.innerHTML = fullHtml || '<div id="loading">Menü verisi bulunamadı.</div>';
         }
+
         loadMenu();
     </script>
 </body>
