@@ -38,7 +38,7 @@
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
 
-        /* GitHub repondaki mantunelogo.png Alanı */
+        /* GitHub'a yüklediğin mantunelogo.png Alanı */
         .logo-container {
             margin-bottom: 15px;
             text-align: center;
@@ -94,7 +94,7 @@
 
         .category-section {
             margin-bottom: 45px;
-            scroll-margin-top: 170px;
+            scroll-margin-top: 170px; /* Linke tıklayınca tam hizada durması için */
         }
 
         /* Kategori Başlık Yapısı */
@@ -116,7 +116,7 @@
             gap: 20px;
         }
 
-        /* Tamamen Şeffaf, Arkasını Gösteren Kart Yapısı */
+        /* İlk Tasarımdaki Gibi Tamamen Şeffaf, Arkasını Gösteren Kart Yapısı */
         .menu-item-card {
             background: rgba(255, 255, 255, 0.06); /* Arkadaki görseli tamamen net gösterir */
             backdrop-filter: blur(5px);
@@ -167,7 +167,7 @@
             line-height: 1.5;
         }
 
-        /* Yükleniyor Yazısı Tasarımı */
+        /* Yükleniyor ve Hata Mesajı Alanları */
         .loading {
             text-align: center;
             font-size: 18px;
@@ -214,8 +214,7 @@
             <img src="mantunelogo.png" alt="Mantune Logo">
         </div>
         
-        <div class="category-nav" id="categoryNav">
-            </div>
+        <div class="category-nav" id="categoryNav"></div>
     </header>
 
     <main class="menu-container" id="menuContainer">
@@ -229,19 +228,20 @@
     </footer>
 
     <script>
-        // BURAYA KENDİ GOOGLE SHEETS API VEYA WEB APP URL'İNİ YAPIŞTIRMALISIN
-        const SPREADSHEET_URL = 'BURAYA_GOOGLE_SHEETS_WEB_APP_VEYA_JSON_URL_GELECEK';
+        // Google Sheets API / Web App URL adresiniz
+        const SPREADSHEET_URL = 'https://script.google.com/macros/s/AKfycbwz2P7f7PzW6_p7_v3_x_EXAMPLE/exec'; 
 
         async function fetchMenu() {
             try {
                 const response = await fetch(SPREADSHEET_URL);
                 const data = await response.json();
-                
-                // Gelen veriyi işleme ve kategorilere ayırma fonksiyonunu tetikle
                 renderMenu(data);
             } catch (error) {
                 console.error("Veri çekilirken hata oluştu:", error);
-                document.getElementById('menuContainer').innerHTML = '<div class="loading">Menü şu anda yüklenemedi. Lütfen daha sonra tekrar deneyin.</div>';
+                document.getElementById('menuContainer').innerHTML = `
+                    <div class="loading" style="color: #c5a059;">
+                        Menü şu anda yüklenemedi. Lütfen daha sonra tekrar deneyin.
+                    </div>`;
             }
         }
 
@@ -252,11 +252,67 @@
             menuContainer.innerHTML = '';
             categoryNav.innerHTML = '';
 
-            // Google Sheets'ten aldığın kategori listesini ve ürün kartlarını 
-            // yukarıdaki .menu-item-card ve .category-title sınıflarını kullanarak buraya kurguluyorsun.
-            // Örnek dinamik append yapısı senin eski kodundaki gibi kalmalıdır.
-            
-            // Örnek tıklama ve aktiflik takibi:
+            // 1. Verileri Kategoriye Göre Gruplama
+            const menuByCategory = {};
+            data.forEach(item => {
+                // Sütun isimlerini kendi tablonuza göre ("Kategori", "ÜrünAdı", "Fiyat", "Açıklama") eşleyin
+                const category = item.Kategori || item.MenuKategori || 'Diğer';
+                if (!menuByCategory[category]) {
+                    menuByCategory[category] = [];
+                }
+                menuByCategory[category].push(item);
+            });
+
+            // 2. Dinamik HTML İçeriğini İnşa Etme
+            Object.keys(menuByCategory).forEach((category, index) => {
+                // Kategori ID'si oluşturma (Navigasyon için)
+                const categoryId = `cat-${index}`;
+
+                // Üst Bar için Dinamik Link Ekleme
+                const navLink = document.createElement('a');
+                navLink.href = `#${categoryId}`;
+                navLink.className = `category-link ${index === 0 ? 'active' : ''}`;
+                navLink.innerText = category;
+                categoryNav.appendChild(navLink);
+
+                // Kategori Bölümü Ekleme
+                const section = document.createElement('section');
+                section.className = 'category-section';
+                section.id = categoryId;
+
+                const title = document.createElement('h2');
+                title.className = 'category-title';
+                title.innerText = category;
+                section.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'menu-grid';
+
+                // Ürün Kartlarını Döngüyle Basma
+                menuByCategory[category].forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'menu-item-card';
+
+                    // Tablonuzdaki sütun başlıklarına göre ("ÜrünAdı", "Fiyat", "Açıklama") burayı güncelleyin
+                    const name = product.ÜrünAdı || product.ProductName || '';
+                    const price = product.Fiyat || product.Price || '0';
+                    const desc = product.Açıklama || product.Description || '';
+
+                    card.innerHTML = `
+                        <div class="item-header">
+                            <span class="item-title">${name}</span>
+                            <span class="item-price">${price} ₺</span>
+                        </div>
+                        ${desc ? `<p class="item-description">${desc}</p>` : ''}
+                    `;
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                menuContainer.appendChild(section);
+            });
+
+            // Navigasyon tıklama olaylarını bağla
             setupNavEvents();
         }
 
@@ -271,8 +327,7 @@
             });
         }
 
-        // Sayfa açıldığında veriyi çekmesi için fonksiyonu başlat
-        // Kendi eski JS fonksiyon isminle değiştirebilirsin.
+        // Sayfa açıldığında çalıştır
         fetchMenu();
     </script>
 </body>
