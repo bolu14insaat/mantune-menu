@@ -5,215 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantune - Dijital Menü</title>
     <style>
-        /* Genel Reset ve Temizleme */
-        * {
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        /* Sayfa Arka Planı - Görselin Cam Gibi Net Görünmesi İçin Optimize Edildi */
-        body {
-            background: #0d0d0c url('arkaplan.png') no-repeat center center fixed;
-            background-size: cover;
-            color: #ffffff;
-            overflow-x: hidden;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-        }
-
-        /* --- SABİT ÜST BAR (HEADER) --- */
         header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 5% 15px 5%;
-            background: rgba(13, 13, 12, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background-color: #1f1f1f;
+            padding: 20px;
+            text-align: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
-
-        /* GitHub'a yüklediğin mantunelogo.png Alanı */
-        .logo-container {
-            margin-bottom: 15px;
-            text-align: center;
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-bottom: 10px;
         }
-
-        .logo-container img {
-            max-height: 75px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        /* Üst Kategori Navigasyon Barı */
         .category-nav {
             display: flex;
-            gap: 12px;
-            max-width: 100%;
-            overflow-x: auto;
-            padding: 5px 5px 12px 5px;
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .category-nav::-webkit-scrollbar {
-            display: none; /* Chrome, Safari */
-        }
-
-        .category-link {
-            background: rgba(255, 255, 255, 0.05);
-            color: #e0e0e0;
-            text-decoration: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .category-link:hover, .category-link.active {
-            background: #c5a059;
-            color: #0d0d0c;
-            border-color: #c5a059;
-            box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
-            font-weight: 600;
-        }
-
-        /* --- ANA KONTEYNER --- */
-        .menu-container {
-            max-width: 1200px;
-            margin: 30px auto 60px auto;
-            padding: 0 20px;
-        }
-
-        .category-section {
-            margin-bottom: 45px;
-            scroll-margin-top: 170px; /* Linke tıklayınca tam hizada durması için */
-        }
-
-        /* Kategori Başlık Yapısı */
-        .category-title {
-            font-size: 24px;
-            color: #c5a059;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
-            border-left: 3px solid #c5a059;
-            padding-left: 12px;
-            font-weight: 700;
-        }
-
-        /* --- MENÜ GRID VE ULTRA ŞEFFAF KUTULAR --- */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-        }
-
-        /* İlk Tasarımdaki Gibi Tamamen Şeffaf, Arkasını Gösteren Kart Yapısı */
-        .menu-item-card {
-            background: rgba(255, 255, 255, 0.06); /* Arkadaki görseli tamamen net gösterir */
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 15px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            min-height: 110px;
-            transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
         }
-
-        .menu-item-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(197, 160, 89, 0.4);
-            background: rgba(255, 255, 255, 0.1);
+        .category-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            background-color: #333333;
+            border-radius: 20px;
+            white-space: nowrap;
         }
-
-        /* Üst Başlık ve Fiyat Alanı */
-        .item-header {
+        .category-link.active {
+            background-color: #ffcc00;
+            color: #000000;
+        }
+        .menu-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .category-section {
+            margin-bottom: 40px;
+        }
+        .category-title {
+            font-size: 22px;
+            color: #ffcc00;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .menu-item {
+            background-color: #1f1f1f;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
-            gap: 15px;
         }
-
-        .item-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: #ffffff;
-            letter-spacing: 0.3px;
+        .item-details {
+            flex: 1;
         }
-
+        .item-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .item-desc {
+            font-size: 14px;
+            color: #aaaaaa;
+            margin-top: 5px;
+        }
         .item-price {
-            font-size: 17px;
-            font-weight: 700;
-            color: #c5a059;
-            white-space: nowrap;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-left: 20px;
         }
-
-        /* Açıklama Metni */
-        .item-description {
-            font-size: 13px;
-            color: #dddddd;
-            line-height: 1.5;
-        }
-
-        /* Yükleniyor ve Hata Mesajı Alanları */
         .loading {
             text-align: center;
             font-size: 18px;
-            color: #c5a059;
-            padding: 40px;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background: rgba(13, 13, 12, 0.95);
-            text-align: center;
-            padding: 30px 20px;
-            border-top: 1px solid rgba(197, 160, 89, 0.3);
-            font-size: 14px;
-            color: #aaaaaa;
-        }
-
-        footer p {
-            margin-bottom: 6px;
-        }
-
-        /* Mobil Cihazlar İçin Ekran Uyumu */
-        @media (max-width: 768px) {
-            header {
-                padding: 15px 10px 10px 10px;
-            }
-            .logo-container img {
-                max-height: 60px;
-            }
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-            .category-title {
-                font-size: 20px;
-            }
+            margin-top: 50px;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
-        <div class="logo-container">
-            <img src="mantunelogo.png" alt="Mantune Logo">
-        </div>
-        
+        <div class="logo">MANTUNE</div>
         <div class="category-nav" id="categoryNav"></div>
     </header>
 
@@ -221,15 +105,8 @@
         <div class="loading">Menü yükleniyor...</div>
     </main>
 
-    <footer>
-        <p><strong>Mantune Mantı Gözleme Ev Yemekleri</strong></p>
-        <p>Borazanlar, Bolu</p>
-        <p>Sipariş ve Rezervasyon: 0(374) 222 14 22</p>
-    </footer>
-
     <script>
-        // SENİN HALİHAZIRDA ÇALIŞAN GOOGLE SHEETS MACRO URL ADRESİN
-        const SPREADSHEET_URL = 'https://script.google.com/macros/s/AKfycbwz2P7f7PzW6_p7_v3_x_EXAMPLE/exec'; 
+        const SPREADSHEET_URL = 'https://script.google.com/macros/s/AKfycbwqZ-7AOn7NdfvOWe0GidFq_uJt7vXQ9M6CunX3O2Zco63W9vU02D8B-h9k4gqEon_I/exec';
 
         async function fetchMenu() {
             try {
@@ -237,11 +114,8 @@
                 const data = await response.json();
                 renderMenu(data);
             } catch (error) {
-                console.error("Veri çekilirken hata oluştu:", error);
-                document.getElementById('menuContainer').innerHTML = `
-                    <div class="loading" style="color: #c5a059;">
-                        Menü şu anda yüklenemedi. Lütfen daha sonra tekrar deneyin.
-                    </div>`;
+                console.error('Hata:', error);
+                document.getElementById('menuContainer').innerHTML = '<div class="loading">Menü yüklenemedi.</div>';
             }
         }
 
@@ -252,79 +126,66 @@
             menuContainer.innerHTML = '';
             categoryNav.innerHTML = '';
 
-            // 1. Verileri Kategoriye Göre Gruplama (Senin çalışan sistemindeki sütun ismi)
-            const menuByCategory = {};
-            data.forEach(item => {
-                const category = item["Menü Kategorisi"] || 'Diğer';
-                if (!menuByCategory[category]) {
-                    menuByCategory[category] = [];
-                }
-                menuByCategory[category].push(item);
-            });
+            const categories = [...new Set(data.map(item => item["Menü Kategorisi"]))];
 
-            // 2. Dinamik HTML İçeriğini İnşa Etme
-            Object.keys(menuByCategory).forEach((category, index) => {
-                const categoryId = `cat-${index}`;
-
-                // Üst Bar için Dinamik Link Ekleme
+            categories.forEach((category, index) => {
                 const navLink = document.createElement('a');
-                navLink.href = `#${categoryId}`;
-                navLink.className = `category-link ${index === 0 ? 'active' : ''}`;
+                navLink.href = `#cat-${index}`;
+                navLink.className = 'category-link';
+                if (index === 0) navLink.className += ' active';
                 navLink.innerText = category;
                 categoryNav.appendChild(navLink);
 
-                // Kategori Bölümü Ekleme
                 const section = document.createElement('section');
                 section.className = 'category-section';
-                section.id = categoryId;
+                section.id = `cat-${index}`;
 
                 const title = document.createElement('h2');
                 title.className = 'category-title';
                 title.innerText = category;
                 section.appendChild(title);
 
-                const grid = document.createElement('div');
-                grid.className = 'menu-grid';
+                const items = data.filter(item => item["Menü Kategorisi"] === category);
+                items.forEach(item => {
+                    const menuItem = document.createElement('div');
+                    menuItem.className = 'menu-item';
 
-                // Ürün Kartlarını Basma (Senin çalışan nesne anahtarların)
-                menuByCategory[category].forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'menu-item-card';
+                    const details = document.createElement('div');
+                    details.className = 'item-details';
 
-                    const name = product["Ürün Adı"] || '';
-                    const price = product["Fiyat (TL)"] || '0';
-                    const desc = product["Açıklama"] || '';
+                    const name = document.createElement('div');
+                    name.className = 'item-name';
+                    name.innerText = item["Ürün Adı"];
+                    details.appendChild(name);
 
-                    // İÇERİKTEN YEMEK RESMİ ALANLARI TAMAMEN KALDIRILDI, SADECE METİNLER BASILIYOR
-                    card.innerHTML = `
-                        <div class="item-header">
-                            <span class="item-title">${name}</span>
-                            <span class="item-price">${price}</span>
-                        </div>
-                        ${desc ? `<p class="item-description">${desc}</p>` : ''}
-                    `;
-                    grid.appendChild(card);
+                    if (item["Açıklama"]) {
+                        const desc = document.createElement('div');
+                        desc.className = 'item-desc';
+                        desc.innerText = item["Açıklama"];
+                        details.appendChild(desc);
+                    }
+
+                    const price = document.createElement('div');
+                    price.className = 'item-price';
+                    price.innerText = item["Fiyat (TL)"] + ' TL';
+
+                    menuItem.appendChild(details);
+                    menuItem.appendChild(price);
+                    section.appendChild(menuItem);
                 });
 
-                section.appendChild(grid);
                 menuContainer.appendChild(section);
             });
 
-            setupNavEvents();
-        }
-
-        function setupNavEvents() {
             const links = document.querySelectorAll('.category-link');
             links.forEach(link => {
-                link.addEventListener('click', () => {
-                    const activeLink = document.querySelector('.category-link.active');
-                    if (activeLink) activeLink.classList.remove('active');
-                    link.classList.add('active');
+                link.addEventListener('click', function() {
+                    document.querySelector('.category-link.active').classList.remove('active');
+                    this.classList.add('active');
                 });
             });
         }
 
-        // Sayfa açıldığında çalıştır
         fetchMenu();
     </script>
 </body>
