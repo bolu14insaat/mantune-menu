@@ -181,11 +181,51 @@
             padding: 20px 26px 12px;
         }
 
-        .logo-image-src {
-            width: 110px;
-            height: auto;
-            display: block;
-            margin-bottom: 6px;
+        .logo-emblem {
+            width: 96px;
+            height: 96px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2px;
+        }
+
+        .logo-emblem::before,
+        .logo-emblem::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1.6px solid rgba(45,90,39,0.22);
+            border-radius: 28px;
+            transform: rotate(45deg);
+            background: rgba(255,255,255,0.58);
+            box-shadow: var(--shadow);
+        }
+
+        .logo-emblem::after {
+            inset: 16px;
+            border-radius: 16px;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .logo-center {
+            position: relative;
+            z-index: 2;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(45,90,39,0.24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.76);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--green);
+            letter-spacing: 1px;
         }
 
         .brand-name {
@@ -484,8 +524,15 @@
                 padding: 12px 10px;
             }
 
-            .logo-image-src {
-                width: 86px;
+            .logo-emblem {
+                width: 78px;
+                height: 78px;
+            }
+
+            .logo-center {
+                width: 46px;
+                height: 46px;
+                font-size: 1.45rem;
             }
 
             .brand-name {
@@ -517,3 +564,387 @@
                 padding: 9px 12px;
                 font-size: 0.82rem;
             }
+
+            .category-section {
+                scroll-margin-top: 82px;
+            }
+
+            .category-title {
+                font-size: 1.65rem;
+                letter-spacing: 0.06rem;
+                margin-bottom: 18px;
+            }
+
+            .menu-item {
+                padding: 15px 15px;
+                gap: 12px;
+            }
+
+            .menu-item.compact {
+                padding-top: 11px;
+                padding-bottom: 11px;
+            }
+
+            .item-main {
+                gap: 10px;
+            }
+
+            .item-image {
+                width: 58px;
+                height: 58px;
+                border-radius: 8px;
+            }
+
+            .item-name {
+                font-size: 1rem;
+            }
+
+            .item-desc {
+                font-size: 0.89rem;
+                line-height: 1.5;
+            }
+
+            .item-price {
+                min-width: 70px;
+                max-width: 92px;
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="manti.png" class="bg-image img-left" alt="Mantı" />
+    <img src="manti.png" class="bg-image img-right" alt="Mantı" />
+
+    <div class="container">
+        <div class="top-bar">
+            <div class="lang-switch" aria-label="Dil seçici">
+                <button id="btn-tr" class="lang-btn active" type="button" onclick="setLang('tr')">
+                    <span class="flag-box flag-tr"></span>
+                    <span>TR</span>
+                </button>
+                <button id="btn-en" class="lang-btn" type="button" onclick="setLang('en')">
+                    <span class="flag-box flag-en"></span>
+                    <span>EN</span>
+                </button>
+            </div>
+        </div>
+
+        <header>
+            <div class="logo-wrap">
+                <div class="logo-emblem">
+                    <div class="logo-center">M</div>
+                </div>
+                <h1 class="brand-name" id="main-title">MANTUNE</h1>
+                <div class="brand-divider"></div>
+                <div class="brand-sub" id="main-tagline">Bolu'nun Geleneksel Lezzeti</div>
+            </div>
+        </header>
+
+        <div class="tabs-wrap">
+            <div class="tabs-shell">
+                <div id="quick-nav" class="quick-nav"></div>
+            </div>
+        </div>
+
+        <div id="loading">Menü Yükleniyor...</div>
+        <div id="menu-content"></div>
+
+        <footer>
+            &copy; 2026 Mantune Bolu.
+        </footer>
+    </div>
+
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1tGMLWyasdCc-FNUF2-iDNHfC0iMjn-ir3FhJizpT0BU/gviz/tq?tqx=out:csv';
+
+        let currentLang = localStorage.getItem('mantune_lang') || 'tr';
+        let menuData = [];
+        let observer;
+
+        function escapeHtml(text) {
+            return String(text ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function cleanValue(value) {
+            if (value === undefined || value === null) return '';
+            return String(value).trim();
+        }
+
+        function slugify(text) {
+            return String(text || '')
+                .toLowerCase()
+                .replace(/ğ/g, 'g')
+                .replace(/ü/g, 'u')
+                .replace(/ş/g, 's')
+                .replace(/ı/g, 'i')
+                .replace(/ö/g, 'o')
+                .replace(/ç/g, 'c')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-');
+        }
+
+        function getLocalizedValue(item, trKey, enKey) {
+            const trValue = cleanValue(item[trKey]);
+            const enValue = cleanValue(item[enKey]);
+
+            if (currentLang === 'en') {
+                return enValue || trValue || '';
+            }
+            return trValue || enValue || '';
+        }
+
+        function getLocalizedCategory(item) {
+            return getLocalizedValue(item, 'Menü Kategorisi', 'Menu Category EN');
+        }
+
+        function getLocalizedName(item) {
+            return getLocalizedValue(item, 'Ürün Adı', 'Product Name EN');
+        }
+
+        function getLocalizedDescription(item) {
+            return getLocalizedValue(item, 'Açıklama', 'Description EN');
+        }
+
+        function getLocalizedPrice(item) {
+            return getLocalizedValue(item, 'Fiyat (TL)', 'Price (TL)');
+        }
+
+        function getImageUrl(item) {
+            return cleanValue(item['Görsel URL']);
+        }
+
+        function formatPriceLines(price) {
+            const raw = cleanValue(price);
+            if (!raw) return '';
+
+            let normalized = raw
+                .replace(/\s*\/\s*/g, '\n')
+                .replace(/₺\s+(?=\d)/g, '₺\n')
+                .replace(/TL\s+(?=\d)/gi, 'TL\n');
+
+            const parts = normalized
+                .split('\n')
+                .map(p => p.trim())
+                .filter(Boolean);
+
+            return parts.map(part => `<span class="price-line">${escapeHtml(part)}</span>`).join('');
+        }
+
+        function updateStaticTexts() {
+            const title = document.getElementById('main-title');
+            const tagline = document.getElementById('main-tagline');
+            const loading = document.getElementById('loading');
+
+            if (currentLang === 'en') {
+                document.documentElement.lang = 'en';
+                title.textContent = 'MANTUNE';
+                tagline.textContent = 'Traditional Taste of Bolu';
+                if (loading.style.display !== 'none') {
+                    loading.textContent = 'Loading menu...';
+                }
+            } else {
+                document.documentElement.lang = 'tr';
+                title.textContent = 'MANTUNE';
+                tagline.textContent = "Bolu'nun Geleneksel Lezzeti";
+                if (loading.style.display !== 'none') {
+                    loading.textContent = 'Menü Yükleniyor...';
+                }
+            }
+
+            document.getElementById('btn-tr').classList.toggle('active', currentLang === 'tr');
+            document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('mantune_lang', lang);
+            updateStaticTexts();
+            renderMenu(menuData, true);
+        }
+
+        async function loadMenu() {
+            try {
+                updateStaticTexts();
+
+                const response = await fetch(sheetUrl);
+                const csvData = await response.text();
+
+                Papa.parse(csvData, {
+                    header: true,
+                    skipEmptyLines: true,
+                    dynamicTyping: false,
+                    complete: (results) => {
+                        menuData = results.data || [];
+                        renderMenu(menuData, false);
+                    },
+                    error: () => {
+                        const loading = document.getElementById('loading');
+                        loading.style.display = 'block';
+                        loading.textContent = currentLang === 'en'
+                            ? 'Data parsing error.'
+                            : 'Veri ayrıştırma hatası.';
+                    }
+                });
+            } catch (error) {
+                const loading = document.getElementById('loading');
+                loading.style.display = 'block';
+                loading.textContent = currentLang === 'en'
+                    ? 'Data connection error.'
+                    : 'Veri bağlantı hatası.';
+            }
+        }
+
+        function renderQuickNav(categoryOrder) {
+            const nav = document.getElementById('quick-nav');
+
+            if (!categoryOrder.length) {
+                nav.innerHTML = '';
+                return;
+            }
+
+            nav.innerHTML = categoryOrder.map((category, index) => {
+                const id = 'cat-' + slugify(category);
+                const activeClass = index === 0 ? 'active' : '';
+                return `<a class="quick-chip ${activeClass}" data-target="${escapeHtml(id)}" href="#${id}">${escapeHtml(category)}</a>`;
+            }).join('');
+
+            nav.querySelectorAll('.quick-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    setActiveTab(chip.dataset.target);
+                });
+            });
+        }
+
+        function setActiveTab(targetId) {
+            document.querySelectorAll('.quick-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.target === targetId);
+            });
+        }
+
+        function setupSectionObserver() {
+            if (observer) observer.disconnect();
+
+            const sections = document.querySelectorAll('.category-section');
+            if (!sections.length) return;
+
+            observer = new IntersectionObserver((entries) => {
+                let visibleSection = null;
+
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        visibleSection = entry.target.id;
+                    }
+                });
+
+                if (visibleSection) {
+                    setActiveTab(visibleSection);
+                }
+            }, {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0.01
+            });
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        function renderMenu(data, animate = true) {
+            const content = document.getElementById('menu-content');
+            const loading = document.getElementById('loading');
+
+            loading.style.display = 'none';
+
+            const categories = {};
+            const categoryOrder = [];
+
+            data.forEach(item => {
+                const localizedCategory = getLocalizedCategory(item);
+                const localizedName = getLocalizedName(item);
+
+                if (!localizedCategory || !localizedName) return;
+
+                if (!categories[localizedCategory]) {
+                    categories[localizedCategory] = [];
+                    categoryOrder.push(localizedCategory);
+                }
+
+                categories[localizedCategory].push(item);
+            });
+
+            renderQuickNav(categoryOrder);
+
+            let fullHtml = '';
+
+            categoryOrder.forEach(category => {
+                const items = categories[category];
+                const categoryId = 'cat-' + slugify(category);
+
+                let catHtml = `
+                    <section class="category-section" id="${escapeHtml(categoryId)}">
+                        <h2 class="category-title">${escapeHtml(category)}</h2>
+                        <div class="menu-list">
+                `;
+
+                items.forEach(item => {
+                    const name = getLocalizedName(item);
+                    const desc = getLocalizedDescription(item);
+                    const price = getLocalizedPrice(item);
+                    const imageUrl = getImageUrl(item);
+                    const compactClass = !desc ? 'compact' : '';
+
+                    if (!name) return;
+
+                    catHtml += `
+                        <article class="menu-item ${compactClass}">
+                            <div class="item-main">
+                                ${imageUrl ? `
+                                    <div class="item-image">
+                                        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(name)}" loading="lazy" />
+                                    </div>
+                                ` : ''}
+                                <div class="item-info">
+                                    <span class="item-name">${escapeHtml(name)}</span>
+                                    ${desc ? `<span class="item-desc">${escapeHtml(desc)}</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="item-price">${formatPriceLines(price)}</div>
+                        </article>
+                    `;
+                });
+
+                catHtml += `
+                        </div>
+                    </section>
+                `;
+
+                fullHtml += catHtml;
+            });
+
+            content.innerHTML = fullHtml || `
+                <div id="loading" style="display:block; margin-top: 80px;">
+                    ${currentLang === 'en' ? 'No menu data found.' : 'Menü verisi bulunamadı.'}
+                </div>
+            `;
+
+            if (animate) {
+                content.classList.remove('menu-fade');
+                void content.offsetWidth;
+                content.classList.add('menu-fade');
+            }
+
+            setupSectionObserver();
+        }
+
+        updateStaticTexts();
+        loadMenu();
+    </script>
+</body>
+</html>
