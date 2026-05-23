@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantune - VIP Transfer & Turizm</title>
+    <title>Mantune - Mantı, Gözleme & Ev Yemekleri Dijital Menü</title>
     <style>
-        /* Genel Reset ve Font Tanımlamaları */
+        /* Genel Reset ve Tema Ayarları */
         * {
             margin: 0;
             padding: 0;
@@ -13,212 +13,208 @@
             font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* Arka plan görselinin net görünmesi için optimize edilmiş body */
         body {
-            background-color: #0b0c10;
+            background: #0b0c10 url('arkaplan.png') no-repeat center center fixed;
+            background-size: cover;
             color: #ffffff;
             overflow-x: hidden;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
 
-        /* --- LOGO VE NAVIGASYON ALANI --- */
+        /* --- ÜST ALAN VE LOGO --- */
         header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 20px 8%;
-            background-color: rgba(11, 12, 16, 0.85);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
+            padding: 25px 5%;
+            background: rgba(11, 12, 16, 0.85);
+            border-bottom: 2px solid #c5a059;
+            position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
         }
 
-        /* Modern CSS Logo Alanı (Manuel logo için alt kısma yorum satırı ekledim) */
-        .logo-container {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
+        /* Orijinal logonun net ve bozulmadan yüklenmesi için alan */
+        .logo-area {
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        .logo-design {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #c5a059 0%, #e5c17d 100%);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
-            margin-right: 12px;
-            transition: transform 0.3s ease;
-        }
-
-        .logo-design span {
-            color: #0b0c10;
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .logo-text {
-            font-size: 22px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            background: linear-gradient(to right, #ffffff 60%, #c5a059 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-container:hover .logo-design {
-            transform: rotate(-5deg) scale(1.05);
-        }
-
-        /* EĞER MANUEL LOGO YÜKLEMEK İSTERSEN: 
-           Yukarıdaki .logo-design ve .logo-text gizleyip, HTML'deki img etiketini açman yeterli.
-           Manuel Logo CSS'i aşağıdadır: */
-        .manual-logo {
-            max-height: 50px;
+        .logo-area img {
+            max-height: 110px;
             width: auto;
             object-fit: contain;
-            display: none; /* Manuel logoyu aktif etmek için bunu 'block' yapabilirsin */
+            filter: drop-shadow(0px 4px 8px rgba(197, 160, 89, 0.3));
         }
 
-        nav ul {
+        /* Kategoriler Arası Hızlı Gezinti Menüsü */
+        .category-nav {
             display: flex;
-            list-style: none;
-            gap: 30px;
+            gap: 15px;
+            max-width: 100%;
+            overflow-x: auto;
+            padding: 10px 5px;
+            scrollbar-width: none; /* Firefox için gizleme */
         }
 
-        nav ul li a {
-            color: #eeeeee;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.3s ease;
+        .category-nav::-webkit-scrollbar {
+            display: none; /* Chrome/Safari için gizleme */
         }
 
-        nav ul li a:hover {
-            color: #c5a059;
-        }
-
-        /* --- HERO VEYA ANA KART ALANI --- */
-        .main-container {
-            margin-top: 120px;
-            padding: 40px 8%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 40px;
-        }
-
-        /* --- GÖRSEL NETLİĞİ VE ŞEFFAF KUTULAR --- */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            width: 100%;
-        }
-
-        .service-card {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            background-color: #1f2833;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            height: 420px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(197, 160, 89, 0.2);
-        }
-
-        /* Maksimum Netlik İçin Ayarlanan Görsel Alanı */
-        .card-image-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .card-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Resmi ezmeden, kırpmadan en net şekilde doldurur */
-            object-position: center;
-            image-rendering: -webkit-optimize-contrast; /* Webkit tarayıcılarda ekstra netlik */
-            image-rendering: crisp-edges;
-            transition: transform 0.5s ease;
-        }
-
-        .service-card:hover .card-image-wrapper img {
-            transform: scale(1.03); /* Hafif ve netliği bozmayan premium bir yaklaşma */
-        }
-
-        /* Yazıların Arkasındaki Şeffaf Kutu */
-        .card-content-box {
-            position: relative;
-            z-index: 2;
-            /* Yüksek şeffaflık ve arkadaki resmi gösteren blur efekti */
-            background: rgba(11, 12, 16, 0.45); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 25px;
-            margin: 15px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Kutuyu belirginleştiren ince hat */
-            transition: background 0.3s ease, border 0.3s ease;
-        }
-
-        .service-card:hover .card-content-box {
-            background: rgba(11, 12, 16, 0.6);
-            border: 1px solid rgba(197, 160, 89, 0.3);
-        }
-
-        .card-content-box h3 {
-            font-size: 20px;
+        .category-link {
+            background: rgba(197, 160, 89, 0.15);
             color: #ffffff;
-            margin-bottom: 8px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .card-content-box p {
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 25px;
             font-size: 14px;
-            color: #d1d1d1;
-            line-height: 1.5;
+            font-weight: 600;
+            white-space: nowrap;
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            transition: all 0.3s ease;
         }
 
-        /* Alt Alan / Footer Bilgisi */
+        .category-link:hover, .category-link.active {
+            background: #c5a059;
+            color: #0b0c10;
+            box-shadow: 0 4px 12px rgba(197, 160, 89, 0.4);
+        }
+
+        /* --- ANA İÇERİK ALANI --- */
+        .menu-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+            scroll-margin-top: 180px; /* Menüye tıklandığında tam hizada durması için */
+        }
+
+        /* Başlıklar ve Altın Varak Süsleme Efekti */
+        .category-title {
+            font-size: 26px;
+            color: #c5a059;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+            border-left: 4px solid #c5a059;
+            padding-left: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* --- MENÜ KARTLARI (MAKSİMUM NETLİK & YÜKSEK ŞEFFAFLIK) --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 25px;
+        }
+
+        .menu-item-card {
+            display: flex;
+            background: rgba(0, 0, 0, 0.25); /* İstediğin gibi çok daha şeffaf, arkasını gösteren kutu */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            height: 130px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(197, 160, 89, 0.5);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Görsellerin Cam Gibi Net Görünmesini Sağlayan Resim Alanı */
+        .item-image-wrapper {
+            width: 120px;
+            height: 100%;
+            flex-shrink: 0;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .item-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Resmi ezmeden tam sığdırır ve net tutar */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        /* İçerik ve Detay Alanı */
+        .item-details {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .item-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .item-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #c5a059;
+            white-space: nowrap;
+        }
+
+        .item-description {
+            font-size: 12px;
+            color: #cccccc;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Footer Bilgileri */
         footer {
-            margin-top: 80px;
-            padding: 30px;
+            background: rgba(11, 12, 16, 0.9);
             text-align: center;
-            border-top: 1px solid rgba(197, 160, 89, 0.1);
-            color: #666666;
-            font-size: 13px;
+            padding: 30px;
+            margin-top: 60px;
+            border-top: 1px solid #c5a059;
+            font-size: 14px;
+            color: #aaaaaa;
         }
 
-        /* Mobil Uyum */
+        footer p {
+            margin-bottom: 5px;
+        }
+
+        /* Mobil Optimizasyon */
         @media (max-width: 768px) {
             header {
-                padding: 15px 5%;
+                padding: 15px 10px;
             }
-            nav {
-                display: none; /* İhtiyaca göre mobil menü entegre edilebilir */
+            .logo-area img {
+                max-height: 85px;
             }
-            .main-container {
-                padding: 20px 5%;
-                margin-top: 100px;
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .category-title {
+                font-size: 22px;
             }
         }
     </style>
@@ -227,63 +223,183 @@
 <body>
 
     <header>
-        <div class="logo-container" onclick="location.reload();">
-            <div class="logo-design">
-                <span>M</span>
-            </div>
-            <div class="logo-text">Mantune</div>
-
-            </div>
-
-        <nav>
-            <ul>
-                <li><a href="#hizmetler">Hizmetlerimiz</a></li>
-                <li><a href="#araçlar">Filomuz</a></li>
-                <li><a href="#iletisim">İletişim</a></li>
-            </ul>
-        </nav>
+        <div class="logo-area">
+            <img src="mantune logo.jpg" alt="Mantune Logo">
+        </div>
+        
+        <div class="category-nav">
+            <a href="#cat-gozlemeler" class="category-link active">Gözlemeler</a>
+            <a href="#cat-mantilar" class="category-link">Mantılar</a>
+            <a href="#cat-icli-kofte" class="category-link">İçli Köfte</a>
+            <a href="#cat-izgaralar" class="category-link">Izgaralar</a>
+            <a href="#cat-ev-yemekleri" class="category-link">Ev Yemekleri</a>
+            <a href="#cat-sarmalar" class="category-link">Sarmalar</a>
+            <a href="#cat-icecekler" class="category-link">İçecekler</a>
+        </div>
     </header>
 
-    <main class="main-container">
-        
-        <div class="card-grid" id="hizmetler">
-            
-            <div class="service-card">
-                <div class="card-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=100&w=800" alt="VIP Transfer Hizmeti">
+    <main class="menu-container">
+
+        <section class="category-section" id="cat-gozlemeler">
+            <h2 class="category-title">Gözlemeler</h2>
+            <div class="menu-grid">
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="gozleme.png" alt="Yoğurtsuz Gözleme">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Yoğurtsuz Gözleme</span>
+                            <span class="item-price">320 ₺</span>
+                        </div>
+                        <p class="item-description">Kıymalı, Patatesli, Patlıcanlı, Ispanaklı, Kaşarlı veya Beyaz Peynirli seçenekleri ile servis edilir.</p>
+                    </div>
                 </div>
-                <div class="card-content-box">
-                    <h3>Havalimanı VIP Transfer</h3>
-                    <p>Konforlu ve tam zamanında transfer çözümleriyle seyahatlerinizi benzersiz bir deneyime dönüştürüyoruz.</p>
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="gozleme.png" alt="Yoğurtlu Bolu Gözlemesi">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Yoğurtlu Bolu Gözlemesi</span>
+                            <span class="item-price">370 ₺</span>
+                        </div>
+                        <p class="item-description">Bolu'ya özgü soslu ve yoğurtlu özel katlama gözleme şöleni.</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="service-card">
-                <div class="card-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=100&w=800" alt="Şehirler Arası Transfer">
+        <section class="category-section" id="cat-mantilar">
+            <h2 class="category-title">Mantılar</h2>
+            <div class="menu-grid">
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="manti.png" alt="Hampal Tabağı">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Hampal Tabağı</span>
+                            <span class="item-price">425 ₺</span>
+                        </div>
+                        <p class="item-description">Kıymalı, Patatesli ve Kavurmalı yaprak mantının bir tabakta buluşmasıyla oluşan enfes lezzet. (Şefin Önerisi)</p>
+                    </div>
                 </div>
-                <div class="card-content-box">
-                    <h3>Şehirler Arası Özel Seyahat</h3>
-                    <p>Uzun mesafeli yolculuklarınızda premium segment araçlarımız ve deneyimli kaptanlarımızla hizmetinizdeyiz.</p>
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="manti.png" alt="Yaprak Mantı">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Yaprak Mantı</span>
+                            <span class="item-price">385 ₺</span>
+                        </div>
+                        <p class="item-description">Göynük Yöresine ait Yaprak Mantı'yı enfes yoğurdumuz ve sosumuzla harmanlayarak sunmaktayız.</p>
+                    </div>
+                </div>
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="manti.png" alt="Üçgen Mantı">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Üçgen Mantı</span>
+                            <span class="item-price">385 ₺</span>
+                        </div>
+                        <p class="item-description">Bolu'ya özgü Üçgen Mantı'yı enfes yoğurdumuz ve özel sosumuzla buluşturuyoruz.</p>
+                    </div>
+                </div>
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="manti.png" alt="Çıtır Mantı">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Çıtır Mantı</span>
+                            <span class="item-price">385 ₺</span>
+                        </div>
+                        <p class="item-description">Yaprak Mantı'nın özel kıvamda kızartılmasıyla oluşan müthiş ve gevrek lezzetimiz.</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="service-card">
-                <div class="card-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=100&w=800" alt="Günübirlik Tur">
+        <section class="category-section" id="cat-icli-kofte">
+            <h2 class="category-title">İçli Köfte</h2>
+            <div class="menu-grid">
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="arkaplan.png" alt="İçli Köfte Porsiyon">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">İçli Köfte Porsiyon</span>
+                            <span class="item-price">390 ₺</span>
+                        </div>
+                        <p class="item-description">3 Adet İçli Köfte. Yanında altın sarısı patates kızartması ve taze salata ile servis edilir.</p>
+                    </div>
                 </div>
-                <div class="card-content-box">
-                    <h3>Turistik & Günübirlik Turlar</h3>
-                    <p>Tatil bölgelerinin en gözde lokasyonlarını size özel tahsis edilmiş konforlu araçlarla keşfedin.</p>
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="arkaplan.png" alt="İçli Köfte Adet">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">İçli Köfte (Adet)</span>
+                            <span class="item-price">125 ₺</span>
+                        </div>
+                        <p class="item-description">Bol etli ve incecik kaplamasıyla mükemmel kıvamda tekli içli köfte.</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-        </div>
+        <section class="category-section" id="cat-ev-yemekleri">
+            <h2 class="category-title">Ev Yemekleri & Menüler</h2>
+            <div class="menu-grid">
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="arkaplan.png" alt="Günün Çorbası">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Günün Çorbası</span>
+                            <span class="item-price">100 ₺</span>
+                        </div>
+                        <p class="item-description">Her gün taze hazırlanan, içinizi ısıtacak sıcacık anne çorbası.</p>
+                    </div>
+                </div>
+                <div class="menu-item-card">
+                    <div class="item-image-wrapper">
+                        <img src="arkaplan.png" alt="Çorbasız Günün Menüsü">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-header">
+                            <span class="item-title">Çorbasız Günün Menüsü</span>
+                            <span class="item-price">320 ₺</span>
+                        </div>
+                        <p class="item-description">Ana yemek, yan yardımcı yemek ve yoğurt/salata içeren doyurucu menü.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer>
-        &copy; 2026 Mantune VIP. Tüm Hakları Saklıdır.
+        <p><strong>Mantune Mantı Gözleme Ev Yemekleri</strong></p>
+        <p>Borazanlar, Bolu</p>
+        <p>Sipariş Hattı: 0(374) 222 14 22</p>
     </footer>
 
+    <script>
+        const links = document.querySelectorAll('.category-link');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.category-link.active').classList.remove('active');
+                link.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
