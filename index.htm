@@ -228,7 +228,7 @@
     </footer>
 
     <script>
-        // Google Sheets API / Web App URL adresiniz
+        // Google Sheets Deployment API Script URL adresin
         const SPREADSHEET_URL = 'https://script.google.com/macros/s/AKfycbwz2P7f7PzW6_p7_v3_x_EXAMPLE/exec'; 
 
         async function fetchMenu() {
@@ -252,11 +252,10 @@
             menuContainer.innerHTML = '';
             categoryNav.innerHTML = '';
 
-            // 1. Verileri Kategoriye Göre Gruplama
+            // 1. Verileri Kategoriye Göre Gruplama (Senin sütun ismin: "Menü Kategorisi")
             const menuByCategory = {};
             data.forEach(item => {
-                // Sütun isimlerini kendi tablonuza göre ("Kategori", "ÜrünAdı", "Fiyat", "Açıklama") eşleyin
-                const category = item.Kategori || item.MenuKategori || 'Diğer';
+                const category = item["Menü Kategorisi"] || 'Diğer';
                 if (!menuByCategory[category]) {
                     menuByCategory[category] = [];
                 }
@@ -265,7 +264,6 @@
 
             // 2. Dinamik HTML İçeriğini İnşa Etme
             Object.keys(menuByCategory).forEach((category, index) => {
-                // Kategori ID'si oluşturma (Navigasyon için)
                 const categoryId = `cat-${index}`;
 
                 // Üst Bar için Dinamik Link Ekleme
@@ -288,20 +286,20 @@
                 const grid = document.createElement('div');
                 grid.className = 'menu-grid';
 
-                // Ürün Kartlarını Döngüyle Basma
+                // Ürün Kartlarını Excel Sütunlarına Göre Basma
                 menuByCategory[category].forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'menu-item-card';
 
-                    // Tablonuzdaki sütun başlıklarına göre ("ÜrünAdı", "Fiyat", "Açıklama") burayı güncelleyin
-                    const name = product.ÜrünAdı || product.ProductName || '';
-                    const price = product.Fiyat || product.Price || '0';
-                    const desc = product.Açıklama || product.Description || '';
+                    // Ekran görüntündeki tam sütun adlarıyla eşlendi
+                    const name = product["Ürün Adı"] || '';
+                    const price = product["Fiyat (TL)"] || '0';
+                    const desc = product["Açıklama"] || '';
 
                     card.innerHTML = `
                         <div class="item-header">
                             <span class="item-title">${name}</span>
-                            <span class="item-price">${price} ₺</span>
+                            <span class="item-price">${price}</span>
                         </div>
                         ${desc ? `<p class="item-description">${desc}</p>` : ''}
                     `;
@@ -312,7 +310,6 @@
                 menuContainer.appendChild(section);
             });
 
-            // Navigasyon tıklama olaylarını bağla
             setupNavEvents();
         }
 
