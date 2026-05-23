@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantune - Mantı, Gözleme & Ev Yemekleri Dijital Menü</title>
+    <title>Mantune - Dijital Menü</title>
     <style>
-        /* Genel Reset ve Tema Ayarları */
+        /* Genel Reset ve Temizleme */
         * {
             margin: 0;
             padding: 0;
@@ -13,9 +13,9 @@
             font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Arka plan görselinin net görünmesi için optimize edilmiş body */
+        /* Sayfa Arka Planı - Görselin Cam Gibi Net Görünmesi İçin Optimize Edildi */
         body {
-            background: #0b0c10 url('arkaplan.png') no-repeat center center fixed;
+            background: #0d0d0c url('arkaplan.png') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             overflow-x: hidden;
@@ -23,383 +23,257 @@
             image-rendering: crisp-edges;
         }
 
-        /* --- ÜST ALAN VE LOGO --- */
+        /* --- SABİT ÜST BAR (HEADER) --- */
         header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 25px 5%;
-            background: rgba(11, 12, 16, 0.85);
-            border-bottom: 2px solid #c5a059;
+            padding: 20px 5% 15px 5%;
+            background: rgba(13, 13, 12, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
 
-        /* Orijinal logonun net ve bozulmadan yüklenmesi için alan */
-        .logo-area {
-            margin-bottom: 20px;
+        /* GitHub repondaki mantunelogo.png Alanı */
+        .logo-container {
+            margin-bottom: 15px;
             text-align: center;
         }
 
-        .logo-area img {
-            max-height: 110px;
+        .logo-container img {
+            max-height: 75px;
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0px 4px 8px rgba(197, 160, 89, 0.3));
         }
 
-        /* Kategoriler Arası Hızlı Gezinti Menüsü */
+        /* Üst Kategori Navigasyon Barı */
         .category-nav {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             max-width: 100%;
             overflow-x: auto;
-            padding: 10px 5px;
-            scrollbar-width: none; /* Firefox için gizleme */
+            padding: 5px 5px 12px 5px;
+            scrollbar-width: none; /* Firefox */
         }
 
         .category-nav::-webkit-scrollbar {
-            display: none; /* Chrome/Safari için gizleme */
+            display: none; /* Chrome, Safari */
         }
 
         .category-link {
-            background: rgba(197, 160, 89, 0.15);
-            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e0e0e0;
             text-decoration: none;
-            padding: 8px 18px;
-            border-radius: 25px;
+            padding: 8px 20px;
+            border-radius: 20px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             white-space: nowrap;
-            border: 1px solid rgba(197, 160, 89, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
 
         .category-link:hover, .category-link.active {
             background: #c5a059;
-            color: #0b0c10;
-            box-shadow: 0 4px 12px rgba(197, 160, 89, 0.4);
+            color: #0d0d0c;
+            border-color: #c5a059;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
+            font-weight: 600;
         }
 
-        /* --- ANA İÇERİK ALANI --- */
+        /* --- ANA KONTEYNER --- */
         .menu-container {
             max-width: 1200px;
-            margin: 40px auto;
+            margin: 30px auto 60px auto;
             padding: 0 20px;
         }
 
         .category-section {
-            margin-bottom: 50px;
-            scroll-margin-top: 180px; /* Menüye tıklandığında tam hizada durması için */
+            margin-bottom: 45px;
+            scroll-margin-top: 170px;
         }
 
-        /* Başlıklar ve Altın Varak Süsleme Efekti */
+        /* Kategori Başlık Yapısı */
         .category-title {
-            font-size: 26px;
+            font-size: 24px;
             color: #c5a059;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 25px;
-            border-left: 4px solid #c5a059;
-            padding-left: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            margin-bottom: 20px;
+            border-left: 3px solid #c5a059;
+            padding-left: 12px;
+            font-weight: 700;
         }
 
-        /* --- MENÜ KARTLARI (MAKSİMUM NETLİK & YÜKSEK ŞEFFAFLIK) --- */
+        /* --- MENÜ GRID VE ULTRA ŞEFFAF KUTULAR --- */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
         }
 
+        /* Tamamen Şeffaf, Arkasını Gösteren Kart Yapısı */
         .menu-item-card {
-            display: flex;
-            background: rgba(0, 0, 0, 0.25); /* İstediğin gibi çok daha şeffaf, arkasını gösteren kutu */
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06); /* Arkadaki görseli tamamen net gösterir */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 15px;
-            overflow: hidden;
-            height: 130px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 110px;
+            transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
         }
 
         .menu-item-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(197, 160, 89, 0.5);
-            background: rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+            border-color: rgba(197, 160, 89, 0.4);
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Görsellerin Cam Gibi Net Görünmesini Sağlayan Resim Alanı */
-        .item-image-wrapper {
-            width: 120px;
-            height: 100%;
-            flex-shrink: 0;
-            background-color: rgba(255, 255, 255, 0.02);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .item-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Resmi ezmeden tam sığdırır ve net tutar */
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-        }
-
-        /* İçerik ve Detay Alanı */
-        .item-details {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
-        }
-
+        /* Üst Başlık ve Fiyat Alanı */
         .item-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 15px;
         }
 
         .item-title {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 17px;
+            font-weight: 600;
             color: #ffffff;
+            letter-spacing: 0.3px;
         }
 
         .item-price {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
             color: #c5a059;
             white-space: nowrap;
         }
 
+        /* Açıklama Metni */
         .item-description {
-            font-size: 12px;
-            color: #cccccc;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 13px;
+            color: #dddddd;
+            line-height: 1.5;
         }
 
-        /* Footer Bilgileri */
-        footer {
-            background: rgba(11, 12, 16, 0.9);
+        /* Yükleniyor Yazısı Tasarımı */
+        .loading {
             text-align: center;
-            padding: 30px;
-            margin-top: 60px;
-            border-top: 1px solid #c5a059;
+            font-size: 18px;
+            color: #c5a059;
+            padding: 40px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: rgba(13, 13, 12, 0.95);
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(197, 160, 89, 0.3);
             font-size: 14px;
             color: #aaaaaa;
         }
 
         footer p {
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
-        /* Mobil Optimizasyon */
+        /* Mobil Cihazlar İçin Ekran Uyumu */
         @media (max-width: 768px) {
             header {
-                padding: 15px 10px;
+                padding: 15px 10px 10px 10px;
             }
-            .logo-area img {
-                max-height: 85px;
+            .logo-container img {
+                max-height: 60px;
             }
             .menu-grid {
                 grid-template-columns: 1fr;
             }
             .category-title {
-                font-size: 22px;
+                font-size: 20px;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
-        <div class="logo-area">
-            <img src="mantune logo.jpg" alt="Mantune Logo">
+        <div class="logo-container">
+            <img src="mantunelogo.png" alt="Mantune Logo">
         </div>
         
-        <div class="category-nav">
-            <a href="#cat-gozlemeler" class="category-link active">Gözlemeler</a>
-            <a href="#cat-mantilar" class="category-link">Mantılar</a>
-            <a href="#cat-icli-kofte" class="category-link">İçli Köfte</a>
-            <a href="#cat-izgaralar" class="category-link">Izgaralar</a>
-            <a href="#cat-ev-yemekleri" class="category-link">Ev Yemekleri</a>
-            <a href="#cat-sarmalar" class="category-link">Sarmalar</a>
-            <a href="#cat-icecekler" class="category-link">İçecekler</a>
-        </div>
+        <div class="category-nav" id="categoryNav">
+            </div>
     </header>
 
-    <main class="menu-container">
-
-        <section class="category-section" id="cat-gozlemeler">
-            <h2 class="category-title">Gözlemeler</h2>
-            <div class="menu-grid">
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="gozleme.png" alt="Yoğurtsuz Gözleme">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Yoğurtsuz Gözleme</span>
-                            <span class="item-price">320 ₺</span>
-                        </div>
-                        <p class="item-description">Kıymalı, Patatesli, Patlıcanlı, Ispanaklı, Kaşarlı veya Beyaz Peynirli seçenekleri ile servis edilir.</p>
-                    </div>
-                </div>
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="gozleme.png" alt="Yoğurtlu Bolu Gözlemesi">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Yoğurtlu Bolu Gözlemesi</span>
-                            <span class="item-price">370 ₺</span>
-                        </div>
-                        <p class="item-description">Bolu'ya özgü soslu ve yoğurtlu özel katlama gözleme şöleni.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="category-section" id="cat-mantilar">
-            <h2 class="category-title">Mantılar</h2>
-            <div class="menu-grid">
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="manti.png" alt="Hampal Tabağı">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Hampal Tabağı</span>
-                            <span class="item-price">425 ₺</span>
-                        </div>
-                        <p class="item-description">Kıymalı, Patatesli ve Kavurmalı yaprak mantının bir tabakta buluşmasıyla oluşan enfes lezzet. (Şefin Önerisi)</p>
-                    </div>
-                </div>
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="manti.png" alt="Yaprak Mantı">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Yaprak Mantı</span>
-                            <span class="item-price">385 ₺</span>
-                        </div>
-                        <p class="item-description">Göynük Yöresine ait Yaprak Mantı'yı enfes yoğurdumuz ve sosumuzla harmanlayarak sunmaktayız.</p>
-                    </div>
-                </div>
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="manti.png" alt="Üçgen Mantı">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Üçgen Mantı</span>
-                            <span class="item-price">385 ₺</span>
-                        </div>
-                        <p class="item-description">Bolu'ya özgü Üçgen Mantı'yı enfes yoğurdumuz ve özel sosumuzla buluşturuyoruz.</p>
-                    </div>
-                </div>
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="manti.png" alt="Çıtır Mantı">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Çıtır Mantı</span>
-                            <span class="item-price">385 ₺</span>
-                        </div>
-                        <p class="item-description">Yaprak Mantı'nın özel kıvamda kızartılmasıyla oluşan müthiş ve gevrek lezzetimiz.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="category-section" id="cat-icli-kofte">
-            <h2 class="category-title">İçli Köfte</h2>
-            <div class="menu-grid">
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="arkaplan.png" alt="İçli Köfte Porsiyon">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">İçli Köfte Porsiyon</span>
-                            <span class="item-price">390 ₺</span>
-                        </div>
-                        <p class="item-description">3 Adet İçli Köfte. Yanında altın sarısı patates kızartması ve taze salata ile servis edilir.</p>
-                    </div>
-                </div>
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="arkaplan.png" alt="İçli Köfte Adet">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">İçli Köfte (Adet)</span>
-                            <span class="item-price">125 ₺</span>
-                        </div>
-                        <p class="item-description">Bol etli ve incecik kaplamasıyla mükemmel kıvamda tekli içli köfte.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="category-section" id="cat-ev-yemekleri">
-            <h2 class="category-title">Ev Yemekleri & Menüler</h2>
-            <div class="menu-grid">
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="arkaplan.png" alt="Günün Çorbası">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Günün Çorbası</span>
-                            <span class="item-price">100 ₺</span>
-                        </div>
-                        <p class="item-description">Her gün taze hazırlanan, içinizi ısıtacak sıcacık anne çorbası.</p>
-                    </div>
-                </div>
-                <div class="menu-item-card">
-                    <div class="item-image-wrapper">
-                        <img src="arkaplan.png" alt="Çorbasız Günün Menüsü">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-header">
-                            <span class="item-title">Çorbasız Günün Menüsü</span>
-                            <span class="item-price">320 ₺</span>
-                        </div>
-                        <p class="item-description">Ana yemek, yan yardımcı yemek ve yoğurt/salata içeren doyurucu menü.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+    <main class="menu-container" id="menuContainer">
+        <div class="loading">Menü yükleniyor...</div>
     </main>
 
     <footer>
         <p><strong>Mantune Mantı Gözleme Ev Yemekleri</strong></p>
         <p>Borazanlar, Bolu</p>
-        <p>Sipariş Hattı: 0(374) 222 14 22</p>
+        <p>Sipariş ve Rezervasyon: 0(374) 222 14 22</p>
     </footer>
 
     <script>
-        const links = document.querySelectorAll('.category-link');
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.category-link.active').classList.remove('active');
-                link.classList.add('active');
+        // BURAYA KENDİ GOOGLE SHEETS API VEYA WEB APP URL'İNİ YAPIŞTIRMALISIN
+        const SPREADSHEET_URL = 'BURAYA_GOOGLE_SHEETS_WEB_APP_VEYA_JSON_URL_GELECEK';
+
+        async function fetchMenu() {
+            try {
+                const response = await fetch(SPREADSHEET_URL);
+                const data = await response.json();
+                
+                // Gelen veriyi işleme ve kategorilere ayırma fonksiyonunu tetikle
+                renderMenu(data);
+            } catch (error) {
+                console.error("Veri çekilirken hata oluştu:", error);
+                document.getElementById('menuContainer').innerHTML = '<div class="loading">Menü şu anda yüklenemedi. Lütfen daha sonra tekrar deneyin.</div>';
+            }
+        }
+
+        function renderMenu(data) {
+            const menuContainer = document.getElementById('menuContainer');
+            const categoryNav = document.getElementById('categoryNav');
+            
+            menuContainer.innerHTML = '';
+            categoryNav.innerHTML = '';
+
+            // Google Sheets'ten aldığın kategori listesini ve ürün kartlarını 
+            // yukarıdaki .menu-item-card ve .category-title sınıflarını kullanarak buraya kurguluyorsun.
+            // Örnek dinamik append yapısı senin eski kodundaki gibi kalmalıdır.
+            
+            // Örnek tıklama ve aktiflik takibi:
+            setupNavEvents();
+        }
+
+        function setupNavEvents() {
+            const links = document.querySelectorAll('.category-link');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    const activeLink = document.querySelector('.category-link.active');
+                    if (activeLink) activeLink.classList.remove('active');
+                    link.classList.add('active');
+                });
             });
-        });
+        }
+
+        // Sayfa açıldığında veriyi çekmesi için fonksiyonu başlat
+        // Kendi eski JS fonksiyon isminle değiştirebilirsin.
+        fetchMenu();
     </script>
 </body>
 </html>
