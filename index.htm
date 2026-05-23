@@ -1,878 +1,289 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mantune - Dijital Menü</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Italiana&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantune - VIP Transfer & Turizm</title>
     <style>
-        :root {
-            /* Renk paleti yeni modern logoya uygun olarak krem, bronz ve antrasit tonlarına güncellendi */
-            --primary: #b38e72;      /* Modern Bronz / Gold tonu */
-            --primary-dark: #8c674f; /* Koyu Bronz */
-            --black: #222222;        /* Yumuşak Siyah */
-            --box-bg: rgba(255, 255, 255, 0.85);
-            --border-soft: rgba(179, 142, 114, 0.2);
-            --shadow: 0 8px 24px rgba(140, 103, 79, 0.06);
-            --shadow-strong: 0 12px 30px rgba(140, 103, 79, 0.12);
-            --sticky-offset: 12px;
-        }
-
+        /* Genel Reset ve Font Tanımlamaları */
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-image: url('arkaplan.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            background-color: #fbf9f5; /* Hafif modern krem tonu */
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            color: var(--black);
-            -webkit-font-smoothing: antialiased;
+            background-color: #0b0c10;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
-        .bg-image {
-            position: fixed;
-            z-index: 1;
-            opacity: 0.15; /* İçeriğin okunmasını zorlaştırmasın diye opaklık düşürüldü */
-            pointer-events: none;
-            width: 350px;
-            height: auto;
-        }
-
-        .img-left {
-            bottom: -50px;
-            left: -80px;
-            transform: rotate(-5deg);
-        }
-
-        .img-right {
-            top: 8%;
-            right: -100px;
-            transform: rotate(5deg);
-        }
-
-        .container {
-            max-width: 680px; /* Mobil odaklı okuma kolaylığı için ideal genişliğe çekildi */
-            margin: 0 auto;
-            padding: 20px 16px 42px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 12px;
-            padding-top: 4px;
-            margin-bottom: 6px;
-        }
-
-        .lang-switch {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--border-soft);
-            border-radius: 999px;
-            padding: 4px;
-            box-shadow: var(--shadow);
-        }
-
-        .lang-btn {
-            appearance: none;
-            border: none;
-            background: transparent;
-            color: var(--primary-dark);
-            padding: 6px 12px;
-            border-radius: 999px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .lang-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .lang-btn.active {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(179, 142, 114, 0.3);
-        }
-
-        .flag-box {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            flex-shrink: 0;
-            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
-        }
-
-        .flag-tr {
-            background: #e11d48;
-        }
-
-        .flag-tr::before {
-            content: "";
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #fff;
-            left: 3px;
-            top: 5px;
-        }
-
-        .flag-tr::after {
-            content: "";
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #e11d48;
-            left: 5px;
-            top: 5px;
-            box-shadow: 5px 0 0 -3px #fff;
-        }
-
-        .flag-en {
-            background:
-                linear-gradient(to right, transparent 0 40%, #fff 40% 60%, transparent 60%),
-                linear-gradient(to bottom, transparent 0 40%, #fff 40% 60%, transparent 60%),
-                linear-gradient(to right, transparent 0 44%, #c62828 44% 56%, transparent 56%),
-                linear-gradient(to bottom, transparent 0 44%, #c62828 44% 56%, transparent 56%),
-                #1e3a8a;
-        }
-
+        /* --- LOGO VE NAVIGASYON ALANI --- */
         header {
-            text-align: center;
-            padding: 10px 0 20px;
-            animation: fadeDown 0.7s ease;
-        }
-
-        .logo-wrap {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 10px;
-        }
-
-        /* Yeni logomuzun geometrik formuna uygun saf SVG Tasarımı */
-        .logo-svg {
-            width: 90px;
-            height: 90px;
-            margin-bottom: 4px;
-        }
-
-        .brand-name {
-            font-family: 'Italiana', serif;
-            color: var(--black);
-            letter-spacing: 0.4rem;
-            text-transform: uppercase;
-            margin: 0;
-            font-size: 2.5rem;
-            line-height: 1;
-            font-weight: 400;
-        }
-
-        .brand-divider {
-            width: 80px;
-            height: 1.5px;
-            background: linear-gradient(to right, transparent, var(--primary), transparent);
-            margin: 4px 0;
-        }
-
-        .brand-sub {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--primary-dark);
-            font-size: 1rem;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-        }
-
-        .tabs-wrap {
-            position: sticky;
-            top: var(--sticky-offset);
-            z-index: 50;
-            margin: 10px 0;
-        }
-
-        .tabs-shell {
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid var(--border-soft);
-            border-radius: 16px;
-            padding: 6px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .quick-nav {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 2px;
-            scrollbar-width: none;
-            scroll-behavior: smooth;
-        }
-
-        .quick-nav::-webkit-scrollbar {
-            display: none;
-        }
-
-        .quick-chip {
-            flex: 0 0 auto;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid transparent;
-            background: rgba(179, 142, 114, 0.06);
-            color: var(--black);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: all 0.25s ease;
-        }
-
-        .quick-chip:hover {
-            background: rgba(179, 142, 114, 0.12);
-        }
-
-        .quick-chip.active {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(179, 142, 114, 0.25);
-        }
-
-        #loading {
-            text-align: center;
-            margin-top: 80px;
-            color: var(--primary-dark);
-            font-size: 1rem;
-            font-weight: 600;
-            animation: pulse 1.3s infinite ease-in-out;
-        }
-
-        .menu-fade {
-            animation: contentFade 0.35s ease;
-        }
-
-        .category-section {
-            margin-top: 36px;
-            scroll-margin-top: 80px;
-        }
-
-        .category-title {
-            color: var(--black);
-            text-align: center;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            border-bottom: 1px solid var(--border-soft);
-            padding-bottom: 8px;
-            letter-spacing: 0.05rem;
-            text-transform: uppercase;
-        }
-
-        .menu-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .menu-item {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 14px;
-            background: var(--box-bg);
-            padding: 14px;
-            border-radius: 14px;
-            border: 1px solid rgba(179, 142, 114, 0.1);
-            box-shadow: var(--shadow);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            animation: fadeUp 0.4s ease;
-        }
-
-        .menu-item.compact {
             align-items: center;
-        }
-
-        .menu-item:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-strong);
-        }
-
-        .item-main {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .menu-item.compact .item-main {
-            align-items: center;
-        }
-
-        .item-image {
-            width: 64px;
-            height: 64px;
-            border-radius: 10px;
-            overflow: hidden;
-            flex-shrink: 0;
-            background: #fff;
-            border: 1px solid var(--border-soft);
-        }
-
-        .item-image img {
+            padding: 20px 8%;
+            background-color: rgba(11, 12, 16, 0.85);
+            backdrop-filter: blur(10px);
+            position: fixed;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
         }
 
-        .item-info {
-            flex: 1;
-            min-width: 0;
+        /* Modern CSS Logo Alanı (Manuel logo için alt kısma yorum satırı ekledim) */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
         }
 
-        .item-name {
+        .logo-design {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #c5a059 0%, #e5c17d 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            margin-right: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-design span {
+            color: #0b0c10;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo-text {
+            font-size: 22px;
             font-weight: 700;
-            font-size: 1.02rem;
-            display: block;
-            color: var(--black);
-            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: linear-gradient(to right, #ffffff 60%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .menu-item.compact .item-name {
-            margin-bottom: 0;
+        .logo-container:hover .logo-design {
+            transform: rotate(-5deg) scale(1.05);
         }
 
-        .item-desc {
-            font-size: 0.88rem;
-            color: #666666;
-            display: block;
-            font-weight: 400;
-            line-height: 1.45;
-            white-space: normal;
-            word-break: break-word;
+        /* EĞER MANUEL LOGO YÜKLEMEK İSTERSEN: 
+           Yukarıdaki .logo-design ve .logo-text gizleyip, HTML'deki img etiketini açman yeterli.
+           Manuel Logo CSS'i aşağıdadır: */
+        .manual-logo {
+            max-height: 50px;
+            width: auto;
+            object-fit: contain;
+            display: none; /* Manuel logoyu aktif etmek için bunu 'block' yapabilirsin */
         }
 
-        .item-price {
-            color: var(--primary-dark);
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 700;
-            font-size: 1.35rem;
-            text-align: right;
-            line-height: 1.1;
-            min-width: 75px;
-            flex-shrink: 0;
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            color: #eeeeee;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #c5a059;
+        }
+
+        /* --- HERO VEYA ANA KART ALANI --- */
+        .main-container {
+            margin-top: 120px;
+            padding: 40px 8%;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-            padding-top: 2px;
+            align-items: center;
+            gap: 40px;
         }
 
-        .price-line {
-            display: block;
-            white-space: nowrap;
+        /* --- GÖRSEL NETLİĞİ VE ŞEFFAF KUTULAR --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            width: 100%;
         }
 
-        footer {
-            text-align: center;
-            padding: 48px 20px 20px;
-            color: #999999;
-            font-size: 0.8rem;
-            font-weight: 500;
+        .service-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: #1f2833;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(197, 160, 89, 0.2);
+        }
+
+        /* Maksimum Netlik İçin Ayarlanan Görsel Alanı */
+        .card-image-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Resmi ezmeden, kırpmadan en net şekilde doldurur */
+            object-position: center;
+            image-rendering: -webkit-optimize-contrast; /* Webkit tarayıcılarda ekstra netlik */
+            image-rendering: crisp-edges;
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover .card-image-wrapper img {
+            transform: scale(1.03); /* Hafif ve netliği bozmayan premium bir yaklaşma */
+        }
+
+        /* Yazıların Arkasındaki Şeffaf Kutu */
+        .card-content-box {
+            position: relative;
+            z-index: 2;
+            /* Yüksek şeffaflık ve arkadaki resmi gösteren blur efekti */
+            background: rgba(11, 12, 16, 0.45); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 25px;
+            margin: 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Kutuyu belirginleştiren ince hat */
+            transition: background 0.3s ease, border 0.3s ease;
+        }
+
+        .service-card:hover .card-content-box {
+            background: rgba(11, 12, 16, 0.6);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+        }
+
+        .card-content-box h3 {
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-weight: 600;
             letter-spacing: 0.5px;
         }
 
-        @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .card-content-box p {
+            font-size: 14px;
+            color: #d1d1d1;
+            line-height: 1.5;
         }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Alt Alan / Footer Bilgisi */
+        footer {
+            margin-top: 80px;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid rgba(197, 160, 89, 0.1);
+            color: #666666;
+            font-size: 13px;
         }
 
-        @keyframes contentFade {
-            from { opacity: 0.3; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
+        /* Mobil Uyum */
         @media (max-width: 768px) {
-            .container {
-                padding: 10px 12px 34px;
-            }
-
-            .bg-image {
-                width: 220px;
-            }
-
             header {
-                padding: 5px 0 12px;
+                padding: 15px 5%;
             }
-
-            .logo-svg {
-                width: 70px;
-                height: 70px;
+            nav {
+                display: none; /* İhtiyaca göre mobil menü entegre edilebilir */
             }
-
-            .brand-name {
-                font-size: 2rem;
-                letter-spacing: 0.3rem;
-            }
-
-            .brand-sub {
-                font-size: 0.85rem;
-                letter-spacing: 0.15rem;
-            }
-
-            .tabs-wrap {
-                top: 6px;
-            }
-
-            .category-section {
-                margin-top: 28px;
-                scroll-margin-top: 74px;
-            }
-
-            .category-title {
-                font-size: 1.5rem;
-                margin-bottom: 14px;
-            }
-
-            .menu-item {
-                padding: 12px;
-                gap: 10px;
-                border-radius: 12px;
-            }
-
-            .item-image {
-                width: 56px;
-                height: 56px;
-            }
-
-            .item-name {
-                font-size: 0.96rem;
-            }
-
-            .item-desc {
-                font-size: 0.84rem;
-            }
-
-            .item-price {
-                font-size: 1.2rem;
-                min-width: 65px;
+            .main-container {
+                padding: 20px 5%;
+                margin-top: 100px;
             }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <img src="manti.png" class="bg-image img-left" alt="Mantı" />
-    <img src="manti.png" class="bg-image img-right" alt="Mantı" />
-
-    <div class="container">
-        <div class="top-bar">
-            <div class="lang-switch" aria-label="Dil seçici">
-                <button id="btn-tr" class="lang-btn active" type="button" onclick="setLang('tr')">
-                    <span class="flag-box flag-tr"></span>
-                    <span>TR</span>
-                </button>
-                <button id="btn-en" class="lang-btn" type="button" onclick="setLang('en')">
-                    <span class="flag-box flag-en"></span>
-                    <span>EN</span>
-                </button>
+    <header>
+        <div class="logo-container" onclick="location.reload();">
+            <div class="logo-design">
+                <span>M</span>
             </div>
-        </div>
+            <div class="logo-text">Mantune</div>
 
-        <header>
-            <div class="logo-wrap">
-                <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 5L95 50L50 95L5 50L50 5Z" stroke="#b38e72" stroke-width="1.5" fill="rgba(255,255,255,0.7)"/>
-                    <path d="M50 16L84 50L50 84L16 50L50 16Z" stroke="#b38e72" stroke-width="1" stroke-dasharray="2 2"/>
-                    <circle cx="50" cy="50" r="20" stroke="#b38e72" stroke-width="1.5" fill="#fff"/>
-                    <text x="50" y="56" font-family="'Cormorant Garamond', serif" font-size="19" font-weight="bold" fill="#8c674f" text-anchor="middle">M</text>
-                </svg>
-                <h1 class="brand-name" id="main-title">MANTUNE</h1>
-                <div class="brand-divider"></div>
-                <div class="brand-sub" id="main-tagline">Bolu'nun Geleneksel Lezzeti</div>
             </div>
-        </header>
 
-        <div class="tabs-wrap">
-            <div class="tabs-shell">
-                <div id="quick-nav" class="quick-nav"></div>
-            </div>
-        </div>
+        <nav>
+            <ul>
+                <li><a href="#hizmetler">Hizmetlerimiz</a></li>
+                <li><a href="#araçlar">Filomuz</a></li>
+                <li><a href="#iletisim">İletişim</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <div id="loading">Menü Yükleniyor...</div>
-        <div id="menu-content"></div>
-
-        <footer>
-            &copy; 2026 Mantune Bolu.
-        </footer>
-    </div>
-
-    <script>
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1tGMLWyasdCc-FNUF2-iDNHfC0iMjn-ir3FhJizpT0BU/gviz/tq?tqx=out:csv';
-
-        let currentLang = localStorage.getItem('mantune_lang') || 'tr';
-        let menuData = [];
-        let observer;
-
-        function escapeHtml(text) {
-            return String(text ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        function cleanValue(value) {
-            if (value === undefined || value === null) return '';
-            return String(value).trim();
-        }
-
-        function slugify(text) {
-            return String(text || '')
-                .toLowerCase()
-                .replace(/ğ/g, 'g')
-                .replace(/ü/g, 'u')
-                .replace(/ş/g, 's')
-                .replace(/ı/g, 'i')
-                .replace(/ö/g, 'o')
-                .replace(/ç/g, 'c')
-                .replace(/[^a-z0-9\s-]/g, '')
-                .trim()
-                .replace(/\s+/g, '-');
-        }
-
-        function getLocalizedValue(item, trKey, enKey) {
-            const trValue = cleanValue(item[trKey]);
-            const enValue = cleanValue(item[enKey]);
-
-            if (currentLang === 'en') {
-                return enValue || trValue || '';
-            }
-            return trValue || enValue || '';
-        }
-
-        function getLocalizedCategory(item) {
-            return getLocalizedValue(item, 'Menü Kategorisi', 'Menu Category EN');
-        }
-
-        function getLocalizedName(item) {
-            return getLocalizedValue(item, 'Ürün Adı', 'Product Name EN');
-        }
-
-        function getLocalizedDescription(item) {
-            return getLocalizedValue(item, 'Açıklama', 'Description EN');
-        }
-
-        function getLocalizedPrice(item) {
-            return getLocalizedValue(item, 'Fiyat (TL)', 'Price (TL)');
-        }
-
-        function getImageUrl(item) {
-            return cleanValue(item['Görsel URL']);
-        }
-
-        function formatPriceLines(price) {
-            let raw = cleanValue(price);
-            if (!raw) return '';
-
-            // Sadece sayı girildiyse otomatik para birimi eklemesi yapalım UX güvencesi için
-            if (!isNaN(raw.replace(/[,.]/g, ''))) {
-                raw = raw + ' ₺';
-            }
-
-            let normalized = raw
-                .replace(/\s*\/\s*/g, '\n')
-                .replace(/₺\s+(?=\d)/g, '₺\n')
-                .replace(/TL\s+(?=\d)/gi, 'TL\n');
-
-            const parts = normalized
-                .split('\n')
-                .map(p => p.trim())
-                .filter(Boolean);
-
-            return parts.map(part => `<span class="price-line">${escapeHtml(part)}</span>`).join('');
-        }
-
-        function updateStaticTexts() {
-            const title = document.getElementById('main-title');
-            const tagline = document.getElementById('main-tagline');
-            const loading = document.getElementById('loading');
-
-            if (currentLang === 'en') {
-                document.documentElement.lang = 'en';
-                title.textContent = 'MANTUNE';
-                tagline.textContent = 'Traditional Taste of Bolu';
-                if (loading.style.display !== 'none') {
-                    loading.textContent = 'Loading menu...';
-                }
-            } else {
-                document.documentElement.lang = 'tr';
-                title.textContent = 'MANTUNE';
-                tagline.textContent = "Bolu'nun Geleneksel Lezzeti";
-                if (loading.style.display !== 'none') {
-                    loading.textContent = 'Menü Yükleniyor...';
-                }
-            }
-
-            document.getElementById('btn-tr').classList.toggle('active', currentLang === 'tr');
-            document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
-        }
-
-        function setLang(lang) {
-            currentLang = lang;
-            localStorage.setItem('mantune_lang', lang);
-            updateStaticTexts();
-            renderMenu(menuData, true);
-        }
-
-        async function loadMenu() {
-            try {
-                updateStaticTexts();
-
-                const response = await fetch(sheetUrl);
-                const csvData = await response.text();
-
-                Papa.parse(csvData, {
-                    header: true,
-                    skipEmptyLines: true,
-                    dynamicTyping: false,
-                    complete: (results) => {
-                        menuData = results.data || [];
-                        renderMenu(menuData, false);
-                    },
-                    error: () => {
-                        const loading = document.getElementById('loading');
-                        loading.style.display = 'block';
-                        loading.textContent = currentLang === 'en'
-                            ? 'Data parsing error.'
-                            : 'Veri ayrıştırma hatası.';
-                    }
-                });
-            } catch (error) {
-                const loading = document.getElementById('loading');
-                loading.style.display = 'block';
-                loading.textContent = currentLang === 'en'
-                    ? 'Data connection error.'
-                    : 'Veri bağlantı hatası.';
-            }
-        }
-
-        function renderQuickNav(categoryOrder) {
-            const nav = document.getElementById('quick-nav');
-
-            if (!categoryOrder.length) {
-                nav.innerHTML = '';
-                return;
-            }
-
-            nav.innerHTML = categoryOrder.map((category, index) => {
-                const id = 'cat-' + slugify(category);
-                const activeClass = index === 0 ? 'active' : '';
-                return `<a class="quick-chip ${activeClass}" data-target="${escapeHtml(id)}" href="#${id}">${escapeHtml(category)}</a>`;
-            }).join('');
-
-            nav.querySelectorAll('.quick-chip').forEach(chip => {
-                chip.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = chip.dataset.target;
-                    const targetSection = document.getElementById(targetId);
-                    if (targetSection) {
-                        const offset = window.innerWidth <= 768 ? 74 : 80;
-                        const bodyRect = document.body.getBoundingClientRect().top;
-                        const elementRect = targetSection.getBoundingClientRect().top;
-                        const elementPosition = elementRect - bodyRect;
-                        const offsetPosition = elementPosition - offset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
-                    setActiveTab(targetId);
-                });
-            });
-        }
-
-        function setActiveTab(targetId) {
-            const activeChip = document.querySelector(`.quick-chip[data-target="${targetId}"]`);
+    <main class="main-container">
+        
+        <div class="card-grid" id="hizmetler">
             
-            document.querySelectorAll('.quick-chip').forEach(chip => {
-                chip.classList.toggle('active', chip.dataset.target === targetId);
-            });
-
-            // Mobil UX İyileştirmesi: Aktif olan kategori butonunu otomatik olarak ekranın ortasına kaydırır
-            if (activeChip) {
-                activeChip.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'center'
-                });
-            }
-        }
-
-        function setupSectionObserver() {
-            if (observer) observer.disconnect();
-
-            const sections = document.querySelectorAll('.category-section');
-            if (!sections.length) return;
-
-            observer = new IntersectionObserver((entries) => {
-                let visibleSection = null;
-
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        visibleSection = entry.target.id;
-                    }
-                });
-
-                if (visibleSection) {
-                    setActiveTab(visibleSection);
-                }
-            }, {
-                root: null,
-                rootMargin: '-20% 0px -60% 0px',
-                threshold: 0.01
-            });
-
-            sections.forEach(section => observer.observe(section));
-        }
-
-        function renderMenu(data, animate = true) {
-            const content = document.getElementById('menu-content');
-            const loading = document.getElementById('loading');
-
-            loading.style.display = 'none';
-
-            const categories = {};
-            const categoryOrder = [];
-
-            data.forEach(item => {
-                const localizedCategory = getLocalizedCategory(item);
-                const localizedName = getLocalizedName(item);
-
-                if (!localizedCategory || !localizedName) return;
-
-                if (!categories[localizedCategory]) {
-                    categories[localizedCategory] = [];
-                    categoryOrder.push(localizedCategory);
-                }
-
-                categories[localizedCategory].push(item);
-            });
-
-            renderQuickNav(categoryOrder);
-
-            let fullHtml = '';
-
-            categoryOrder.forEach(category => {
-                const items = categories[category];
-                const categoryId = 'cat-' + slugify(category);
-
-                let catHtml = `
-                    <section class="category-section" id="${escapeHtml(categoryId)}">
-                        <h2 class="category-title">${escapeHtml(category)}</h2>
-                        <div class="menu-list">
-                `;
-
-                items.forEach(item => {
-                    const name = getLocalizedName(item);
-                    const desc = getLocalizedDescription(item);
-                    const price = getLocalizedPrice(item);
-                    const imageUrl = getImageUrl(item);
-                    const compactClass = !desc ? 'compact' : '';
-
-                    if (!name) return;
-
-                    catHtml += `
-                        <article class="menu-item ${compactClass}">
-                            <div class="item-main">
-                                ${imageUrl ? `
-                                    <div class="item-image">
-                                        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(name)}" loading="lazy" />
-                                    </div>
-                                ` : ''}
-                                <div class="item-info">
-                                    <span class="item-name">${escapeHtml(name)}</span>
-                                    ${desc ? `<span class="item-desc">${escapeHtml(desc)}</span>` : ''}
-                                </div>
-                            </div>
-                            <div class="item-price">${formatPriceLines(price)}</div>
-                        </article>
-                    `;
-                });
-
-                catHtml += `
-                        </div>
-                    </section>
-                `;
-
-                fullHtml += catHtml;
-            });
-
-            content.innerHTML = fullHtml || `
-                <div id="loading" style="display:block; margin-top: 80px;">
-                    ${currentLang === 'en' ? 'No menu data found.' : 'Menü verisi bulunamadı.'}
+            <div class="service-card">
+                <div class="card-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=100&w=800" alt="VIP Transfer Hizmeti">
                 </div>
-            `;
+                <div class="card-content-box">
+                    <h3>Havalimanı VIP Transfer</h3>
+                    <p>Konforlu ve tam zamanında transfer çözümleriyle seyahatlerinizi benzersiz bir deneyime dönüştürüyoruz.</p>
+                </div>
+            </div>
 
-            if (animate) {
-                content.classList.remove('menu-fade');
-                void content.offsetWidth;
-                content.classList.add('menu-fade');
-            }
+            <div class="service-card">
+                <div class="card-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=100&w=800" alt="Şehirler Arası Transfer">
+                </div>
+                <div class="card-content-box">
+                    <h3>Şehirler Arası Özel Seyahat</h3>
+                    <p>Uzun mesafeli yolculuklarınızda premium segment araçlarımız ve deneyimli kaptanlarımızla hizmetinizdeyiz.</p>
+                </div>
+            </div>
 
-            setupSectionObserver();
-        }
+            <div class="service-card">
+                <div class="card-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=100&w=800" alt="Günübirlik Tur">
+                </div>
+                <div class="card-content-box">
+                    <h3>Turistik & Günübirlik Turlar</h3>
+                    <p>Tatil bölgelerinin en gözde lokasyonlarını size özel tahsis edilmiş konforlu araçlarla keşfedin.</p>
+                </div>
+            </div>
 
-        updateStaticTexts();
-        loadMenu();
-    </script>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Mantune VIP. Tüm Hakları Saklıdır.
+    </footer>
+
 </body>
 </html>
