@@ -44,24 +44,27 @@
             color: var(--black);
         }
 
+        /* ARKA PLAN GÖRSELLERİ */
+
         .bg-image {
             position: fixed;
             z-index: 1;
-            opacity: 1;
+            opacity: 0.95;
             pointer-events: none;
-            width: 450px;
+            width: 420px;
             height: auto;
+            transition: 0.3s ease;
         }
 
         .img-left {
-            bottom: -50px;
-            left: -80px;
+            bottom: -40px;
+            left: -70px;
             transform: rotate(-5deg);
         }
 
         .img-right {
-            top: 8%;
-            right: -100px;
+            top: 10%;
+            right: -90px;
             transform: rotate(5deg);
         }
 
@@ -73,36 +76,53 @@
             z-index: 10;
         }
 
-        .top-bar {
+        /* STICKY ÜST BAR */
+
+        .top-sticky-bar {
+            position: sticky;
+            top: 0;
+            z-index: 999;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            padding-top: 14px;
-            margin-bottom: 6px;
+            padding: 12px 18px;
+            backdrop-filter: blur(14px);
+            background: rgba(0,0,0,0.18);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
+
+        .sticky-logo {
+            width: 88px;
+            height: auto;
+            object-fit: contain;
+            filter:
+                drop-shadow(0 6px 14px rgba(0,0,0,0.40))
+                brightness(1.08);
+        }
+
+        /* DİL SEÇİCİ */
 
         .lang-switch {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255,255,255,0.82);
-            border: 1px solid var(--border-soft);
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 999px;
-            padding: 6px;
-            box-shadow: var(--shadow);
+            padding: 5px;
+            backdrop-filter: blur(8px);
         }
 
         .lang-btn {
             appearance: none;
             border: none;
             background: transparent;
-            color: var(--primary);
-            padding: 9px 14px;
+            color: #fff;
+            padding: 8px 12px;
             border-radius: 999px;
             cursor: pointer;
             font-family: 'Inter', sans-serif;
-            font-size: 0.92rem;
+            font-size: 0.88rem;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
@@ -111,29 +131,22 @@
         }
 
         .lang-btn.active {
-            background: var(--primary);
+            background: rgba(255,255,255,0.18);
             color: #fff;
-            box-shadow: 0 6px 18px rgba(139,58,43,0.22);
         }
 
-        .flag-box {
+        .flag-img {
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            overflow: hidden;
+            object-fit: cover;
         }
 
-        .flag-tr {
-            background: #e11d48;
-        }
-
-        .flag-en {
-            background: #1e3a8a;
-        }
+        /* HEADER */
 
         header {
             text-align: center;
-            padding: 24px 0 22px;
+            padding: 20px 0 22px;
         }
 
         .logo-wrap {
@@ -141,14 +154,7 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            padding: 20px 26px 12px;
-        }
-
-        .logo-img {
-            width: 150px;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 8px 18px rgba(0,0,0,0.12));
+            padding: 10px 26px 12px;
         }
 
         .brand-name {
@@ -178,9 +184,11 @@
             margin-top: -2px;
         }
 
+        /* KATEGORİLER */
+
         .tabs-wrap {
             position: sticky;
-            top: var(--sticky-offset);
+            top: 78px;
             z-index: 50;
             margin: 6px 0 10px;
         }
@@ -221,6 +229,8 @@
             color: #fff;
         }
 
+        /* LOADING */
+
         #loading {
             text-align: center;
             margin-top: 110px;
@@ -228,6 +238,8 @@
             font-size: 1.08rem;
             font-weight: 700;
         }
+
+        /* MENU */
 
         .category-section {
             margin-top: 42px;
@@ -293,6 +305,8 @@
             font-size: 0.86rem;
         }
 
+        /* MOBİL */
+
         @media (max-width: 768px) {
 
             body {
@@ -303,8 +317,34 @@
                 padding: 14px 14px 34px;
             }
 
-            .logo-img {
-                width: 110px;
+            /* MOBİLDE GÖRSELLER KÜÇÜLDÜ */
+
+            .bg-image {
+                width: 210px;
+                opacity: 0.82;
+            }
+
+            .img-left {
+                bottom: -10px;
+                left: -70px;
+            }
+
+            .img-right {
+                top: 8%;
+                right: -65px;
+            }
+
+            .top-sticky-bar {
+                padding: 10px 12px;
+            }
+
+            .sticky-logo {
+                width: 68px;
+            }
+
+            .lang-btn {
+                padding: 7px 10px;
+                font-size: 0.8rem;
             }
 
             .brand-name {
@@ -333,272 +373,50 @@
 
 <body>
 
+    <!-- ARKA PLAN GÖRSELLERİ -->
+
     <img src="manti.png" class="bg-image img-left" alt="Mantı" />
-    <img src="manti.png" class="bg-image img-right" alt="Mantı" />
+    <img src="gozleme.png" class="bg-image img-right" alt="Gözleme" />
 
-    <div class="container">
+    <!-- STICKY ÜST BAR -->
 
-        <div class="top-bar">
-            <div class="lang-switch">
-                <button id="btn-tr" class="lang-btn active" onclick="setLang('tr')">
-                    <span class="flag-box flag-tr"></span> TR
-                </button>
+    <div class="top-sticky-bar">
 
-                <button id="btn-en" class="lang-btn" onclick="setLang('en')">
-                    <span class="flag-box flag-en"></span> EN
-                </button>
-            </div>
-        </div>
+        <img
+            class="sticky-logo"
+            src="mantunelogo.png"
+            alt="Mantune Logo"
+        />
 
-        <header>
-            <div class="logo-wrap">
+        <div class="lang-switch">
+
+            <button id="btn-tr" class="lang-btn active" onclick="setLang('tr')">
 
                 <img
-                    class="logo-img"
-                    src="mantunelogo.png"
-                    alt="Mantune Logo"
+                    class="flag-img"
+                    src="https://flagcdn.com/w40/tr.png"
+                    alt="TR"
                 />
 
-                <h1 class="brand-name" id="main-title">MANTUNE</h1>
+                TR
 
-                <div class="brand-divider"></div>
+            </button>
 
-                <div class="brand-sub" id="main-tagline">
-                    Bolu'nun Geleneksel Lezzeti
-                </div>
+            <button id="btn-en" class="lang-btn" onclick="setLang('en')">
 
-            </div>
-        </header>
+                <img
+                    class="flag-img"
+                    src="https://flagcdn.com/w40/gb.png"
+                    alt="EN"
+                />
 
-        <div class="tabs-wrap">
-            <div class="tabs-shell">
-                <div id="quick-nav" class="quick-nav"></div>
-            </div>
+                EN
+
+            </button>
+
         </div>
 
-        <div id="loading">Menü Yükleniyor...</div>
-
-        <div id="menu-content"></div>
-
-        <footer>
-            &copy; 2026 Mantune Bolu.
-        </footer>
-
     </div>
-
-<script>
-
-const sheetUrl = 'https://docs.google.com/spreadsheets/d/1tGMLWyasdCc-FNUF2-iDNHfC0iMjn-ir3FhJizpT0BU/gviz/tq?tqx=out:csv';
-
-let currentLang = localStorage.getItem('mantune_lang') || 'tr';
-let menuData = [];
-
-function cleanValue(value) {
-    if (value === undefined || value === null) return '';
-    return String(value).trim();
-}
-
-function slugify(text) {
-    return String(text || '')
-        .toLowerCase()
-        .replace(/\s+/g, '-');
-}
-
-function getLocalizedValue(item, trKey, enKey) {
-
-    const trValue = cleanValue(item[trKey]);
-    const enValue = cleanValue(item[enKey]);
-
-    if (currentLang === 'en') {
-        return enValue || trValue || '';
-    }
-
-    return trValue || enValue || '';
-}
-
-function getLocalizedCategory(item) {
-    return getLocalizedValue(item, 'Menü Kategorisi', 'Menu Category EN');
-}
-
-function getLocalizedName(item) {
-    return getLocalizedValue(item, 'Ürün Adı', 'Product Name EN');
-}
-
-function getLocalizedDescription(item) {
-    return getLocalizedValue(item, 'Açıklama', 'Description EN');
-}
-
-function getLocalizedPrice(item) {
-    return getLocalizedValue(item, 'Fiyat (TL)', 'Price (TL)');
-}
-
-function updateStaticTexts() {
-
-    const loading = document.getElementById('loading');
-
-    if (currentLang === 'en') {
-
-        document.getElementById('main-tagline').textContent =
-            'Traditional Taste of Bolu';
-
-        if (loading.style.display !== 'none') {
-            loading.textContent = 'Loading menu...';
-        }
-
-    } else {
-
-        document.getElementById('main-tagline').textContent =
-            "Bolu'nun Geleneksel Lezzeti";
-
-        if (loading.style.display !== 'none') {
-            loading.textContent = 'Menü Yükleniyor...';
-        }
-    }
-
-    document.getElementById('btn-tr')
-        .classList.toggle('active', currentLang === 'tr');
-
-    document.getElementById('btn-en')
-        .classList.toggle('active', currentLang === 'en');
-}
-
-function setLang(lang) {
-    currentLang = lang;
-    localStorage.setItem('mantune_lang', lang);
-    updateStaticTexts();
-    renderMenu(menuData);
-}
-
-async function loadMenu() {
-
-    try {
-
-        updateStaticTexts();
-
-        const response = await fetch(sheetUrl);
-        const csvData = await response.text();
-
-        Papa.parse(csvData, {
-
-            header: true,
-            skipEmptyLines: true,
-
-            complete: (results) => {
-
-                menuData = results.data || [];
-                renderMenu(menuData);
-
-            }
-
-        });
-
-    } catch (error) {
-
-        document.getElementById('loading').textContent =
-            'Veri bağlantı hatası';
-
-    }
-}
-
-function renderQuickNav(categories) {
-
-    const nav = document.getElementById('quick-nav');
-
-    nav.innerHTML = categories.map((category, index) => {
-
-        const id = 'cat-' + slugify(category);
-
-        return `
-            <a
-                class="quick-chip ${index === 0 ? 'active' : ''}"
-                href="#${id}">
-                ${category}
-            </a>
-        `;
-
-    }).join('');
-}
-
-function renderMenu(data) {
-
-    const content = document.getElementById('menu-content');
-    document.getElementById('loading').style.display = 'none';
-
-    const categories = {};
-    const categoryOrder = [];
-
-    data.forEach(item => {
-
-        const category = getLocalizedCategory(item);
-        const name = getLocalizedName(item);
-
-        if (!category || !name) return;
-
-        if (!categories[category]) {
-
-            categories[category] = [];
-            categoryOrder.push(category);
-
-        }
-
-        categories[category].push(item);
-
-    });
-
-    renderQuickNav(categoryOrder);
-
-    let html = '';
-
-    categoryOrder.forEach(category => {
-
-        const id = 'cat-' + slugify(category);
-
-        html += `
-            <section class="category-section" id="${id}">
-                <h2 class="category-title">${category}</h2>
-                <div class="menu-list">
-        `;
-
-        categories[category].forEach(item => {
-
-            html += `
-                <article class="menu-item">
-
-                    <div class="item-info">
-
-                        <span class="item-name">
-                            ${getLocalizedName(item)}
-                        </span>
-
-                        <span class="item-desc">
-                            ${getLocalizedDescription(item)}
-                        </span>
-
-                    </div>
-
-                    <div class="item-price">
-                        ${getLocalizedPrice(item)}
-                    </div>
-
-                </article>
-            `;
-
-        });
-
-        html += `
-                </div>
-            </section>
-        `;
-
-    });
-
-    content.innerHTML = html;
-}
-
-updateStaticTexts();
-loadMenu();
-
-</script>
 
 </body>
 </html>
