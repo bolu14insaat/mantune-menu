@@ -228,7 +228,7 @@
     </footer>
 
     <script>
-        // Google Sheets Deployment API Script URL adresin
+        // SENİN HALİHAZIRDA ÇALIŞAN GOOGLE SHEETS MACRO URL ADRESİN
         const SPREADSHEET_URL = 'https://script.google.com/macros/s/AKfycbwz2P7f7PzW6_p7_v3_x_EXAMPLE/exec'; 
 
         async function fetchMenu() {
@@ -252,7 +252,7 @@
             menuContainer.innerHTML = '';
             categoryNav.innerHTML = '';
 
-            // 1. Verileri Kategoriye Göre Gruplama (Senin sütun ismin: "Menü Kategorisi")
+            // 1. Verileri Kategoriye Göre Gruplama (Senin çalışan sistemindeki sütun ismi)
             const menuByCategory = {};
             data.forEach(item => {
                 const category = item["Menü Kategorisi"] || 'Diğer';
@@ -286,16 +286,16 @@
                 const grid = document.createElement('div');
                 grid.className = 'menu-grid';
 
-                // Ürün Kartlarını Excel Sütunlarına Göre Basma
+                // Ürün Kartlarını Basma (Senin çalışan nesne anahtarların)
                 menuByCategory[category].forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'menu-item-card';
 
-                    // Ekran görüntündeki tam sütun adlarıyla eşlendi
                     const name = product["Ürün Adı"] || '';
                     const price = product["Fiyat (TL)"] || '0';
                     const desc = product["Açıklama"] || '';
 
+                    // İÇERİKTEN YEMEK RESMİ ALANLARI TAMAMEN KALDIRILDI, SADECE METİNLER BASILIYOR
                     card.innerHTML = `
                         <div class="item-header">
                             <span class="item-title">${name}</span>
